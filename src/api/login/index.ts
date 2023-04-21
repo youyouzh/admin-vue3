@@ -90,6 +90,59 @@ export const getAsyncRoutes = () => {
           keepAlive: true,
           alwaysShow: true,
           children: null
+        },
+        {
+          id: 102,
+          parentId: 1,
+          name: '项目编辑',
+          path: 'project-edit',
+          component: 'resource/project/edit',
+          componentName: null,
+          icon: 'ep:grid',
+          visible: false,
+          keepAlive: true,
+          alwaysShow: false,
+          children: null
+        }
+      ]
+    },
+    {
+      id: 1,
+      parentId: 0,
+      name: '部署管理',
+      path: '/deploy',
+      component: null,
+      componentName: null,
+      icon: 'ep:mostly-cloudy',
+      visible: true,
+      keepAlive: true,
+      alwaysShow: true,
+      children: [
+        {
+          id: 100,
+          parentId: 1,
+          name: '部署任务',
+          path: 'task',
+          component: 'deploy/task/index',
+          componentName: null,
+          icon: 'ep:data-line',
+          visible: true,
+          keepAlive: true,
+          alwaysShow: true,
+          children: null
+        },
+        {
+          id: 101,
+          parentId: 1,
+          name: '批量部署任务',
+          path: 'batch-task',
+          component: 'deploy/batch-task/index',
+          componentName: null,
+          icon: 'ep:data-analysis',
+          visible: true,
+          keepAlive: true,
+          alwaysShow: true,
+          children: null
         }
       ]
     },
