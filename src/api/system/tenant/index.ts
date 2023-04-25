@@ -12,7 +12,7 @@ export interface TenantVO {
   password: string
   expireTime: Date
   accountCount: number
-  createTime: Date
+  createdAt: Date
 }
 
 export interface TenantPageReqVO extends PageParam {
@@ -20,7 +20,7 @@ export interface TenantPageReqVO extends PageParam {
   contactName?: string
   contactMobile?: string
   status?: number
-  createTime?: Date[]
+  createdAt?: Date[]
 }
 
 export interface TenantExportReqVO {
@@ -28,7 +28,7 @@ export interface TenantExportReqVO {
   contactName?: string
   contactMobile?: string
   status?: number
-  createTime?: Date[]
+  createdAt?: Date[]
 }
 
 // 查询租户列表

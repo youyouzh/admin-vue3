@@ -7,7 +7,7 @@ export interface ErrorCodeVO {
   code: number | undefined
   message: string
   memo: string
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询错误码列表

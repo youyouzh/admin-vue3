@@ -6,13 +6,12 @@ export type DictTypeVO = {
   type: string
   status: number
   remark: string
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询字典（精简)列表
 export const getSimpleDictTypeList = () => {
-  return []
-  // return request.get({ url: '/system/dict-type/list-all-simple' })
+  return request.get({ url: '/system/dict-type/list-all-simple' })
 }
 
 // 查询字典列表

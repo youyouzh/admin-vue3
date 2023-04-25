@@ -29,9 +29,9 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
+      <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker
-          v-model="queryParams.createTime"
+          v-model="queryParams.createdAt"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
           class="!w-240px"
           end-placeholder="结束日期"
@@ -80,14 +80,14 @@
         :formatter="dateFormatter"
         align="center"
         label="创建时间"
-        prop="createTime"
+        prop="createdAt"
         width="180"
       />
       <el-table-column
         :formatter="dateFormatter"
         align="center"
         label="更新时间"
-        prop="createTime"
+        prop="createdAt"
         width="180"
       />
       <el-table-column align="center" fixed="right" label="操作" width="300px">
@@ -169,7 +169,7 @@ const queryParams = reactive({
   pageSize: 10,
   tableName: undefined,
   tableComment: undefined,
-  createTime: []
+  createdAt: []
 })
 const queryFormRef = ref() // 搜索的表单
 const dataSourceConfigList = ref<DataSourceConfigApi.DataSourceConfigVO[]>([]) // 数据源列表

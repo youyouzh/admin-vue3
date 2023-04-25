@@ -35,7 +35,7 @@
         {{ formatDate(detailData.readTime) }}
       </el-descriptions-item>
       <el-descriptions-item label="创建时间">
-        {{ formatDate(detailData.createTime) }}
+        {{ formatDate(detailData.createdAt) }}
       </el-descriptions-item>
     </el-descriptions>
   </Dialog>

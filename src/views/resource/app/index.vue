@@ -64,16 +64,11 @@
       <el-table-column label="应用编号" align="center" prop="id" />
       <el-table-column label="应用名称" align="center" prop="name" />
       <el-table-column label="应用编码" align="center" prop="code" />
-      <el-table-column label="应用描述" align="center" prop="remark" />
-      <el-table-column label="状态" align="center" prop="status">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
-        </template>
-      </el-table-column>
+      <el-table-column label="应用描述" align="center" prop="description" />
       <el-table-column
         label="创建时间"
         align="center"
-        prop="createTime"
+        prop="createdAt"
         width="180"
         :formatter="dateFormatter"
       />
@@ -108,13 +103,13 @@
   </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
-  <AppForm ref="formRef" @success="getList" />
+  <Form ref="formRef" @success="getList" />
 </template>
-<script setup lang="tsx" name="ResourceApp">
+<script setup lang="tsx">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import * as AppApi from '@/api/resource/app'
-import AppForm from './AppForm.vue'
+import { api } from '@/api/resource/app'
+import Form from './Form.vue'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
@@ -124,18 +119,17 @@ const list = ref([]) // 列表的数据
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  code: '',
-  name: '',
-  status: undefined
+  code: undefined,
+  name: undefined,
+  state: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 const exportLoading = ref(false) // 导出的加载中
 
-/** 查询岗位列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await AppApi.getAppPage(queryParams)
+    const data = await api.getPage(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -167,7 +161,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await AppApi.deleteApp(id)
+    await api.delete(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()

@@ -9,7 +9,7 @@ export interface SmsChannelVO {
   apiKey: string
   apiSecret: string
   callbackUrl: string
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询短信渠道列表

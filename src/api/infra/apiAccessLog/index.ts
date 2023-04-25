@@ -16,7 +16,7 @@ export interface ApiAccessLogVO {
   duration: number
   resultCode: number
   resultMsg: string
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询列表API 访问日志

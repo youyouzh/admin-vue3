@@ -50,7 +50,7 @@ export default {
     delSuccess: '删除成功',
     index: '序号',
     status: '状态',
-    createTime: '创建时间',
+    createdAt: '创建时间',
     updateTime: '更新时间',
     copy: '复制',
     copySuccess: '复制成功',
@@ -266,7 +266,7 @@ export default {
     index: '序号',
     title: '标题',
     author: '作者',
-    createTime: '创建时间',
+    createdAt: '创建时间',
     action: '操作',
     pagination: '分页',
     reserveIndex: '叠加序号',
@@ -397,7 +397,7 @@ export default {
       sex: '性别',
       man: '男',
       woman: '女',
-      createTime: '创建日期'
+      createdAt: '创建日期'
     },
     info: {
       title: '基本信息',

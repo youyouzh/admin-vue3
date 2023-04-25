@@ -40,7 +40,7 @@ export interface ProfileVO {
   remark: string
   loginIp: string
   loginDate: Date
-  createTime: Date
+  createdAt: Date
 }
 
 export interface UserProfileUpdateReqVO {

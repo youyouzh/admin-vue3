@@ -24,7 +24,7 @@ export interface ApiErrorLogVO {
   processStatus: number
   processTime: Date
   resultCode: number
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询列表API 访问日志

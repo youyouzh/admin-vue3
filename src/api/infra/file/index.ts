@@ -3,7 +3,7 @@ import request from '@/config/axios'
 export interface FilePageReqVO extends PageParam {
   path?: string
   type?: string
-  createTime?: Date[]
+  createdAt?: Date[]
 }
 
 // 查询文件列表

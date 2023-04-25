@@ -155,3 +155,14 @@ export const fileSizeFormatter = (row, column, cellValue) => {
   const sizeStr = size.toFixed(2) //保留的小数位数
   return sizeStr + ' ' + unitArr[index]
 }
+
+/**
+ * 使用JSON深度clone对象
+ * @param object 对象
+ */
+export const cloneDeep = (object) => {
+  if (!!object) {
+    return JSON.parse(JSON.stringify(object))
+  }
+  return object
+}

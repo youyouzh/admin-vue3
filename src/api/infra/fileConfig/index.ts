@@ -22,7 +22,7 @@ export interface FileConfigVO {
   visible: boolean
   config: FileClientConfig
   remark: string
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询文件配置列表

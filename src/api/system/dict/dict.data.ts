@@ -10,13 +10,12 @@ export type DictDataVO = {
   colorType: string
   cssClass: string
   remark: string
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询字典数据（精简)列表
 export const listSimpleDictData = () => {
-  return []
-  // return request.get({ url: '/system/dict-data/list-all-simple' })
+  return request.get({ url: '/system/dict-data/list-all-simple' })
 }
 
 // 查询字典数据列表

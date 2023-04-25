@@ -1,13 +1,24 @@
 /**
- * Created by 芋道源码
- *
- * 枚举类
+ * 常量和枚举
  */
 
 // 全局通用状态枚举
 export const CommonStatusEnum = {
   ENABLE: 0, // 开启
   DISABLE: 1 // 禁用
+}
+
+// 通用状态
+export const CommonState = {
+  ENABLED: 'ENABLED',
+  DISABLED: 'DISABLED'
+}
+
+// 项目状态
+export const DeployProjectState = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE',
+  DISCARD: 'DISCARD'
 }
 
 /**

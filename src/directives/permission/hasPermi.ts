@@ -16,8 +16,10 @@ export function hasPermi(app: App<Element>) {
       const hasPermissions = permissions.some((permission: string) => {
         return all_permission === permission || permissionFlag.includes(permission)
       })
+      // dev环境打开所有权限
+      const openAllPermission = import.meta.env.VITE_DEV === 'true'
 
-      if (!hasPermissions) {
+      if (!hasPermissions && !openAllPermission) {
         el.parentNode && el.parentNode.removeChild(el)
       }
     } else {

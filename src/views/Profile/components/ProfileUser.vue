@@ -40,8 +40,8 @@
       </li>
       <li class="list-group-item">
         <Icon class="mr-5px" icon="ep:calendar" />
-        {{ t('profile.user.createTime') }}
-        <div class="pull-right">{{ formatDate(userInfo?.createTime) }}</div>
+        {{ t('profile.user.createdAt') }}
+        <div class="pull-right">{{ formatDate(userInfo?.createdAt) }}</div>
       </li>
     </ul>
   </div>

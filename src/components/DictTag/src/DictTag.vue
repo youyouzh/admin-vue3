@@ -29,7 +29,7 @@ export default defineComponent({
         }
       })
     }
-    const rederDictTag = () => {
+    const renderDictTag = () => {
       if (!props.type) {
         return null
       }
@@ -54,7 +54,7 @@ export default defineComponent({
         </ElTag>
       )
     }
-    return () => rederDictTag()
+    return () => renderDictTag()
   }
 })
 </script>

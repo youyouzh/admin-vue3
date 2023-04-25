@@ -50,7 +50,7 @@ export default {
     delSuccess: 'Deleted successfully',
     index: 'Index',
     status: 'Status',
-    createTime: 'Create Time',
+    createdAt: 'Create Time',
     updateTime: 'Update Time',
     copy: 'Copy',
     copySuccess: 'Copy Success',
@@ -266,7 +266,7 @@ export default {
     index: 'Index',
     title: 'Title',
     author: 'Author',
-    createTime: 'Create time',
+    createdAt: 'Create time',
     action: 'Action',
     pagination: 'pagination',
     reserveIndex: 'Reserve index',
@@ -405,7 +405,7 @@ export default {
       sex: 'Sex',
       man: 'Man',
       woman: 'Woman',
-      createTime: 'Created Date'
+      createdAt: 'Created Date'
     },
     info: {
       title: 'Basic Information',

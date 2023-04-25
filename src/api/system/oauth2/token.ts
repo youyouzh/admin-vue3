@@ -7,7 +7,7 @@ export interface OAuth2TokenVO {
   userId: number
   userType: number
   clientId: string
-  createTime: Date
+  createdAt: Date
   expiresTime: Date
 }
 

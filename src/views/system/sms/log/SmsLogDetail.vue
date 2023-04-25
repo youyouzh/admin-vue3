@@ -29,7 +29,7 @@
         {{ detailData.templateParams }}
       </el-descriptions-item>
       <el-descriptions-item label="创建时间">
-        {{ formatDate(detailData.createTime) }}
+        {{ formatDate(detailData.createdAt) }}
       </el-descriptions-item>
       <el-descriptions-item label="发送状态">
         <dict-tag :type="DICT_TYPE.SYSTEM_SMS_SEND_STATUS" :value="detailData.sendStatus" />

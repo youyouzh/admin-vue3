@@ -57,7 +57,7 @@ onMounted(() => {
                     {{ item.templateNickname }}：{{ item.templateContent }}
                   </span>
                   <span class="message-date">
-                    {{ formatDate(item.createTime) }}
+                    {{ formatDate(item.createdAt) }}
                   </span>
                 </div>
               </div>

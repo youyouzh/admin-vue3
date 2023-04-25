@@ -7,7 +7,7 @@ export interface SensitiveWordVO {
   status: number
   description: string
   tags: string[]
-  createTime: Date
+  createdAt: Date
 }
 
 export interface SensitiveWordTestReqVO {

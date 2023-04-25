@@ -5,7 +5,7 @@
         {{ detailData.templateNickname }}
       </el-descriptions-item>
       <el-descriptions-item label="发送时间">
-        {{ formatDate(detailData.createTime) }}
+        {{ formatDate(detailData.createdAt) }}
       </el-descriptions-item>
       <el-descriptions-item label="消息类型">
         <dict-tag :type="DICT_TYPE.SYSTEM_NOTIFY_TEMPLATE_TYPE" :value="detailData.templateType" />

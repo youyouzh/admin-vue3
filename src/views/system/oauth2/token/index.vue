@@ -71,7 +71,7 @@
       <el-table-column
         label="创建时间"
         align="center"
-        prop="createTime"
+        prop="createdAt"
         :formatter="dateFormatter"
         width="180"
       />

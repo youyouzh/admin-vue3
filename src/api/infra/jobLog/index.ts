@@ -11,7 +11,7 @@ export interface JobLogVO {
   endTime: string
   duration: string
   status: number
-  createTime: string
+  createdAt: string
 }
 
 // 任务日志列表

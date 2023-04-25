@@ -59,7 +59,7 @@ const crudSchemas = reactive<CrudSchema[]>([
   },
   {
     label: '创建时间',
-    field: 'createTime',
+    field: 'createdAt',
     isForm: false,
     formatter: dateFormatter,
     detail: {

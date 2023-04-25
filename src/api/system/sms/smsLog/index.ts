@@ -25,7 +25,7 @@ export interface SmsLogVO {
   receiveTime: Date | null
   apiReceiveCode: string
   apiReceiveMsg: string
-  createTime: Date | null
+  createdAt: Date | null
 }
 
 // 查询短信日志列表

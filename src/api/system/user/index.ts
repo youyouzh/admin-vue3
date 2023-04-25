@@ -14,7 +14,7 @@ export interface UserVO {
   status: number
   remark: string
   loginDate: Date
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询用户管理列表

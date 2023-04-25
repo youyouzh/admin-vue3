@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle" width="800">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="500">
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -13,16 +13,6 @@
       <el-form-item label="应用编码" prop="code">
         <el-input v-model="formData.code" placeholder="请输入应用编码" />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="formData.status" clearable placeholder="请选择状态">
-          <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="应用描述" prop="description">
         <el-input v-model="formData.description" placeholder="请输入应用描述" type="textarea" />
       </el-form-item>
@@ -33,10 +23,9 @@
     </template>
   </Dialog>
 </template>
-<script lang="ts" name="ResourceAppForm" setup>
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { CommonStatusEnum } from '@/utils/constants'
-import * as PostApi from '@/api/system/post'
+<script lang="ts" setup>
+import { CommonState } from '@/utils/constants'
+import { api, AppVO } from '@/api/resource/app'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -50,12 +39,11 @@ const formData = ref({
   name: '',
   code: '',
   description: '',
-  status: CommonStatusEnum.ENABLE
+  state: CommonState.ENABLED
 })
 const formRules = reactive({
   name: [{ required: true, message: '应用名称不能为空', trigger: 'blur' }],
   code: [{ required: true, message: '应用编码不能为空', trigger: 'change' }],
-  status: [{ required: true, message: '应用状态不能为空', trigger: 'change' }],
   description: [{ required: false, message: '应用描述不能为空', trigger: 'blur' }]
 })
 const formRef = ref() // 表单 Ref
@@ -70,7 +58,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await PostApi.getPost(id)
+      formData.value = await api.getDetail(id)
     } finally {
       formLoading.value = false
     }
@@ -88,12 +76,12 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as unknown as PostApi.PostVO
+    const data = formData.value as unknown as AppVO
     if (formType.value === 'create') {
-      await PostApi.createPost(data)
+      await api.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await PostApi.updatePost(data)
+      await api.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
@@ -110,7 +98,7 @@ const resetForm = () => {
     id: undefined,
     name: '',
     code: '',
-    status: CommonStatusEnum.ENABLE,
+    state: CommonState.ENABLED,
     description: ''
   }
   formRef.value?.resetFields()

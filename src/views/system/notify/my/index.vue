@@ -25,9 +25,9 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="发送时间" prop="createTime">
+      <el-form-item label="发送时间" prop="createdAt">
         <el-date-picker
-          v-model="queryParams.createTime"
+          v-model="queryParams.createdAt"
           value-format="YYYY-MM-DD HH:mm:ss"
           type="daterange"
           start-placeholder="开始日期"
@@ -63,7 +63,7 @@
       <el-table-column
         label="发送时间"
         align="center"
-        prop="createTime"
+        prop="createdAt"
         width="200"
         :formatter="dateFormatter"
       />
@@ -129,7 +129,7 @@ const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
   readStatus: undefined,
-  createTime: []
+  createdAt: []
 })
 const queryFormRef = ref() // 搜索的表单
 const tableRef = ref() // 表格的 Ref

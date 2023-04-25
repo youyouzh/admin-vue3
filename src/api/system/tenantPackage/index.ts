@@ -9,7 +9,7 @@ export interface TenantPackageVO {
   updater: string
   updateTime: string
   menuIds: number[]
-  createTime: Date
+  createdAt: Date
 }
 
 // 查询租户套餐列表
