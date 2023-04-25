@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 
-export interface AppVO {
+export interface FormReqVO {
   id?: number
   name: string
   code: string
@@ -16,10 +16,10 @@ export const api = {
   getDetail: async (id: number) => {
     return await request.get({ url: '/resources/apps/' + id })
   },
-  create: async (data: AppVO) => {
+  create: async (data: FormReqVO) => {
     return await request.post({ url: '/resources/apps', data: data })
   },
-  update: async (params: AppVO) => {
+  update: async (params: FormReqVO) => {
     return await request.put({ url: '/resources/apps', data: params })
   },
   delete: async (id: number) => {

@@ -8,10 +8,10 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="名称" prop="name">
+      <el-form-item label="关键词" prop="keyword">
         <el-input
-          v-model="queryParams.name"
-          placeholder="请输入project名称"
+          v-model="queryParams.keyword"
+          placeholder="请输入关键词"
           clearable
           @keyup.enter="handleQuery"
         />
@@ -44,10 +44,14 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
       <el-table-column label="ID" align="center" prop="id" width="60" />
-      <el-table-column label="编码" align="center" prop="code" />
-      <el-table-column label="名称" align="center" prop="name" />
-      <el-table-column label="描述" align="center" prop="description" width="200" />
-      <el-table-column label="状态" align="center" prop="projectState" />
+      <el-table-column label="编号" align="center" prop="code" width="150" />
+      <el-table-column label="名称" align="center" prop="name" width="150" />
+      <el-table-column label="备注" align="center" prop="remark" width="200" />
+      <el-table-column label="状态" align="center" prop="projectState" width="150">
+        <template #default="scope">
+          <dict-tag :type="DICT_TYPE.DEPLOY_PROJECT_STATE" :value="scope.row.projectState" />
+        </template>
+      </el-table-column>
       <el-table-column
         label="创建时间"
         align="center"
@@ -55,7 +59,7 @@
         width="180"
         :formatter="dateFormatter"
       />
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="scope">
           <el-button
             link
@@ -65,6 +69,9 @@
           >
             编辑
           </el-button>
+          <router-link :to="'resource/project/detail/' + scope.row.id">
+            <el-button link type="primary">详情</el-button>
+          </router-link>
           <el-button
             link
             type="danger"
@@ -94,24 +101,24 @@
       :rules="formRules"
       label-width="80px"
     >
+      <el-form-item label="编号" prop="code">
+        <el-input v-model="formData.code" placeholder="请输入项目编号" />
+      </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入名称" />
-      </el-form-item>
-      <el-form-item label="编码" prop="code">
-        <el-input v-model="formData.code" placeholder="请输入项目编码" />
       </el-form-item>
       <el-form-item label="项目状态" prop="projectState">
         <el-select v-model="formData.projectState" placeholder="请选择项目状态">
           <el-option
-            v-for="item in options"
+            v-for="item in getStrDictOptions(DICT_TYPE.DEPLOY_PROJECT_STATE)"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="描述" prop="description">
-        <el-input v-model="formData.description" placeholder="请输入描述" type="textarea" />
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="formData.remark" placeholder="请输入项目备注" type="textarea" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -124,6 +131,7 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { api, FormReqVO } from '@/api/resource/project'
 import { DeployProjectState } from '@/utils/constants'
+import { DICT_TYPE, getStrDictOptions } from '@/utils/dict'
 import { cloneDeep } from '@/utils'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
@@ -134,7 +142,7 @@ const list = ref([]) // 列表的数据
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  name: undefined
+  keyword: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 const exportLoading = ref(false) // 导出的加载中
@@ -202,18 +210,18 @@ const formType = ref('') // 表单的类型：create - 新增；update - 修改
 
 const defaultFormData = {
   id: undefined,
-  name: undefined,
   code: undefined,
-  description: undefined,
+  name: undefined,
+  remark: undefined,
   projectState: DeployProjectState.ONLINE
 }
 const formRef = ref()
 const formData = ref(cloneDeep(defaultFormData))
 const formRules = reactive({
-  name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
-  code: [{ required: true, message: '编码不能为空', trigger: 'blur' }],
+  code: [{ required: true, message: '项目编号不能为空', trigger: 'blur' }],
+  name: [{ required: true, message: '项目名称不能为空', trigger: 'blur' }],
   projectState: [{ required: true, message: '项目状态不能为空', trigger: 'change' }],
-  description: [{ required: false, message: '描述不能为空', trigger: 'blur' }]
+  remark: [{ required: false, message: '项目备注不能为空', trigger: 'blur' }]
 })
 
 /** 打开弹窗 */

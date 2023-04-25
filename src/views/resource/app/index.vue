@@ -8,31 +8,13 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="应用名称" prop="name">
+      <el-form-item label="关键词" prop="keyword">
         <el-input
-          v-model="queryParams.name"
-          placeholder="请输入应用名称"
+          v-model="queryParams.keyword"
+          placeholder="请输入关键词"
           clearable
           @keyup.enter="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="应用编码" prop="code">
-        <el-input
-          v-model="queryParams.code"
-          placeholder="请输入应用编码"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
@@ -40,8 +22,8 @@
         <el-button
           type="primary"
           plain
-          @click="openForm('create')"
-          v-hasPermi="['system:notice:create']"
+          @click="openDialog('create')"
+          v-hasPermi="['resource:project:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
@@ -50,7 +32,7 @@
           plain
           @click="handleExport"
           :loading="exportLoading"
-          v-hasPermi="['infra:config:export']"
+          v-hasPermi="['resource:project:export']"
         >
           <Icon icon="ep:download" class="mr-5px" /> 导出
         </el-button>
@@ -61,10 +43,10 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
-      <el-table-column label="应用编号" align="center" prop="id" />
-      <el-table-column label="应用名称" align="center" prop="name" />
-      <el-table-column label="应用编码" align="center" prop="code" />
-      <el-table-column label="应用描述" align="center" prop="description" />
+      <el-table-column label="ID" align="center" prop="id" width="60" />
+      <el-table-column label="编号" align="center" prop="code" width="150" />
+      <el-table-column label="名称" align="center" prop="name" width="150" />
+      <el-table-column label="备注" align="center" prop="remark" width="200" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -72,13 +54,13 @@
         width="180"
         :formatter="dateFormatter"
       />
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="scope">
           <el-button
             link
             type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['system:post:update']"
+            @click="openDialog('update', scope.row.id)"
+            v-hasPermi="['resource:project:update']"
           >
             编辑
           </el-button>
@@ -86,7 +68,7 @@
             link
             type="danger"
             @click="handleDelete(scope.row.id)"
-            v-hasPermi="['system:post:delete']"
+            v-hasPermi="['resource:project:delete']"
           >
             删除
           </el-button>
@@ -103,13 +85,34 @@
   </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
-  <Form ref="formRef" @success="getList" />
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="500">
+    <el-form
+      ref="formRef"
+      v-loading="formLoading"
+      :model="formData"
+      :rules="formRules"
+      label-width="80px"
+    >
+      <el-form-item label="编号" prop="code">
+        <el-input v-model="formData.code" placeholder="请输入项目编号" />
+      </el-form-item>
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="formData.name" placeholder="请输入名称" />
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="formData.remark" placeholder="请输入备注" type="textarea" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button :disabled="formLoading" type="primary" @click="submitForm">确 定</el-button>
+      <el-button @click="dialogVisible = false">取 消</el-button>
+    </template>
+  </Dialog>
 </template>
 <script setup lang="tsx">
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import { api } from '@/api/resource/app'
-import Form from './Form.vue'
+import { api, FormReqVO } from '@/api/resource/app'
+import { cloneDeep } from '@/utils'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
@@ -119,9 +122,7 @@ const list = ref([]) // 列表的数据
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  code: undefined,
-  name: undefined,
-  state: undefined
+  keyword: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 const exportLoading = ref(false) // 导出的加载中
@@ -149,12 +150,6 @@ const resetQuery = () => {
   handleQuery()
 }
 
-/** 添加/修改操作 */
-const formRef = ref()
-const openForm = (type: string, id?: number) => {
-  formRef.value.open(type, id)
-}
-
 /** 删除按钮操作 */
 const handleDelete = async (id: number) => {
   try {
@@ -175,7 +170,6 @@ const handleExport = async () => {
     await message.exportConfirm()
     // 发起导出
     exportLoading.value = true
-    console.log('export')
     // const data = await AppApi.export(queryParams)
     // download.excel(data, '岗位列表.xls')
   } catch {
@@ -188,4 +182,71 @@ const handleExport = async () => {
 onMounted(() => {
   getList()
 })
+
+const dialogVisible = ref(false) // 弹窗的是否展示
+const dialogTitle = ref('') // 弹窗的标题
+const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
+const formType = ref('') // 表单的类型：create - 新增；update - 修改
+
+const defaultFormData = {
+  id: undefined,
+  name: undefined,
+  code: undefined,
+  remark: undefined
+}
+const formRef = ref()
+const formData = ref(cloneDeep(defaultFormData))
+const formRules = reactive({
+  code: [{ required: true, message: '编号不能为空', trigger: 'blur' }],
+  name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+  remark: [{ required: false, message: '备注不能为空', trigger: 'blur' }]
+})
+
+/** 打开弹窗 */
+const openDialog = async (type: string, id?: number) => {
+  dialogVisible.value = true
+  dialogTitle.value = t('action.' + type)
+  formType.value = type
+  resetForm()
+  // 修改时，设置数据
+  if (id) {
+    formLoading.value = true
+    try {
+      formData.value = await api.getDetail(id)
+    } finally {
+      formLoading.value = false
+    }
+  }
+}
+
+/** 提交表单 */
+const submitForm = async () => {
+  // 校验表单
+  if (!formRef) return
+  const valid = await formRef.value.validate()
+  if (!valid) return
+  // 提交请求
+  formLoading.value = true
+  try {
+    const data = formData.value as unknown as FormReqVO
+    if (formType.value === 'create') {
+      await api.create(data)
+      message.success(t('common.createSuccess'))
+    } else {
+      await api.update(data)
+      message.success(t('common.updateSuccess'))
+    }
+    dialogVisible.value = false
+    // 更新列表
+    await getList()
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 重置表单 */
+const resetForm = () => {
+  formData.value = cloneDeep(defaultFormData)
+  formRef.value?.resetFields()
+}
 </script>

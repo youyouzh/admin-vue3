@@ -44,37 +44,21 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
       <el-table-column label="ID" align="center" prop="id" width="60" />
-      <el-table-column label="项目" align="center" prop="deployProject.code" width="150" />
-      <el-table-column label="部署机器" align="center" prop="deployAgent" width="150">
+      <el-table-column label="编号" align="center" prop="code" width="150" />
+      <el-table-column label="名称" align="center" prop="name" width="150" />
+      <el-table-column label="描述" align="center" prop="description" width="200" />
+      <el-table-column label="状态" align="center" prop="projectState" width="150">
         <template #default="scope">
-          <el-text>{{ `${scope.row.deployAgent.name}(${scope.row.deployAgent.ip}))` }}</el-text>
+          <dict-tag :type="DICT_TYPE.DEPLOY_PROJECT_STATE" :value="scope.row.projectState" />
         </template>
       </el-table-column>
       <el-table-column
-        label="部署版本"
+        label="创建时间"
         align="center"
-        prop="deployProjectVersion.version"
-        width="200"
-      />
-      <el-table-column
-        label="部署开始时间"
-        align="center"
-        prop="deployStartTime"
+        prop="createdAt"
         width="180"
         :formatter="dateFormatter"
       />
-      <el-table-column label="部署进度" align="center" width="150">
-        <template #default="scope">
-          <el-progress
-            :percentage="scope.row.progress"
-            :stroke-width="15"
-            :status="scope.row.deployState === 'FAILURE' ? 'exception' : 'success'"
-            striped
-            striped-flow
-            :duration="10"
-          />
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="scope">
           <el-button

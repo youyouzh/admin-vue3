@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 
-export interface AppVO {
+export interface FormReqVO {
   id?: number
   name: string
   code: string
@@ -11,18 +11,18 @@ export interface AppVO {
 
 export const api = {
   getPage: async (params: PageParam) => {
-    return await request.get({ url: '/resources/apps', params })
+    return await request.get({ url: '/deploy/tasks', params })
   },
   getDetail: async (id: number) => {
-    return await request.get({ url: '/resources/apps/' + id })
+    return await request.get({ url: '/deploy/tasks/' + id })
   },
-  create: async (data: AppVO) => {
-    return await request.post({ url: '/resources/apps', data: data })
+  create: async (data: FormReqVO) => {
+    return await request.post({ url: '/deploy/tasks', data: data })
   },
-  update: async (params: AppVO) => {
-    return await request.put({ url: '/resources/apps', data: params })
+  update: async (params: FormReqVO) => {
+    return await request.put({ url: '/deploy/tasks', data: params })
   },
   delete: async (id: number) => {
-    return await request.delete({ url: '/resources/apps/' + id })
+    return await request.delete({ url: '/deploy/tasks/' + id })
   }
 }

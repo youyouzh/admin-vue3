@@ -142,7 +142,7 @@ export function formatPast2(ms) {
  * @param cellValue 字段值
  */
 // @ts-ignore
-export const dateFormatter = (row, column, cellValue) => {
+export const dateFormatter: any = (row, column, cellValue) => {
   if (!cellValue) {
     return
   }

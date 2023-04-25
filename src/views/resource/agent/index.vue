@@ -44,9 +44,22 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
       <el-table-column label="ID" align="center" prop="id" width="60" />
-      <el-table-column label="名称" align="center" prop="name" />
-      <el-table-column label="ip地址" align="center" prop="ip" />
+      <el-table-column label="名称" align="center" prop="name" width="150" />
+      <el-table-column label="ip地址" align="center" prop="ip" width="150" />
       <el-table-column label="描述" align="center" prop="description" width="200" />
+      <el-table-column label="是否可用" align="center" width="150">
+        <template #default="scope">
+          <p v-if="scope.row.active" style="color: green">是</p>
+          <p v-else style="color: gray">否</p>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="上次心跳"
+        align="center"
+        prop="lastHeartbeatTime"
+        width="180"
+        :formatter="dateFormatter"
+      />
       <el-table-column
         label="创建时间"
         align="center"
@@ -54,7 +67,7 @@
         width="180"
         :formatter="dateFormatter"
       />
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="scope">
           <el-button
             link
