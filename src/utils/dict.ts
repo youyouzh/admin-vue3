@@ -46,7 +46,6 @@ export const getStrDictOptions = (dictType: string) => {
       value: dict.value + ''
     })
   })
-  console.log(dictOption)
   return dictOption
 }
 

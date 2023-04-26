@@ -1,38 +1,53 @@
 <template>
-  <el-tabs type="border-card">
+  <el-alert :title="`服务详情：${projectDetail.code} (id: ${projectDetail.id})`" type="success" />
+  <el-tabs type="border-card" v-if="dataLoadFinish">
     <el-tab-pane label="基本信息">
-      <el-form
-        ref="formRef"
-        v-loading="formLoading"
-        :model="formData"
-        :rules="formRules"
-        label-width="80px"
-      >
-        <el-form-item label="编号" prop="code">
-          <el-input v-model="formData.code" placeholder="请输入项目编号" />
-        </el-form-item>
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="formData.name" placeholder="请输入名称" />
-        </el-form-item>
-        <el-form-item label="项目状态" prop="projectState">
-          <el-select v-model="formData.projectState" placeholder="请选择项目状态">
-            <el-option
-              v-for="item in getStrDictOptions(DICT_TYPE.DEPLOY_PROJECT_STATE)"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="formData.remark" placeholder="请输入项目备注" type="textarea" />
-        </el-form-item>
-      </el-form>
+      <BaseForm :project-detail="projectDetail" />
     </el-tab-pane>
-    <el-tab-pane label="部署配置" />
-    <el-tab-pane label="配置文件" />
-    <el-tab-pane label="版本管理" />
-    <el-tab-pane label="部署详情" />
+    <el-tab-pane label="配置文件">
+      <ConfigFileForm :project-detail="projectDetail" />
+    </el-tab-pane>
+    <el-tab-pane label="部署配置">
+      <DeployConfigForm :project-detail="projectDetail" />
+    </el-tab-pane>
+    <el-tab-pane label="部署包管理"> 部署包管理 </el-tab-pane>
+    <el-tab-pane label="部署任务详情"> 部署任务详情 </el-tab-pane>
   </el-tabs>
 </template>
-<script setup lang="tsx"></script>
+<script setup lang="tsx">
+import { useRoute } from 'vue-router'
+import BaseForm from './BaseForm.vue'
+import { api } from '@/api/resource/project'
+import ConfigFileForm from './ConfigFileForm.vue'
+import DeployConfigForm from './DeployConfigForm.vue'
+
+// 从路由中获取项目id参数
+const projectId = parseInt(useRoute().params.id + '')
+
+const projectDetail = ref({
+  id: 0,
+  code: ''
+})
+// 保证数据加载完成后再渲染子tab
+const dataLoadFinish = ref(false)
+
+// 初始化表单数据
+const initProjectDetail = async () => {
+  try {
+    dataLoadFinish.value = false
+    projectDetail.value = await api.getDetail(projectId)
+  } finally {
+    dataLoadFinish.value = true
+  }
+}
+
+/** 初始化 **/
+onMounted(() => {
+  initProjectDetail()
+})
+</script>
+<style lang="css">
+.el-alert {
+  margin-bottom: 10px;
+}
+</style>

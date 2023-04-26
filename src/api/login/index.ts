@@ -81,7 +81,7 @@ export const getAsyncRoutes = () => {
         {
           id: 102,
           parentId: 1,
-          name: '项目管理',
+          name: '服务管理',
           path: 'project',
           component: 'resource/project/index',
           componentName: null,
@@ -94,12 +94,14 @@ export const getAsyncRoutes = () => {
         {
           id: 102,
           parentId: 1,
-          name: '项目编辑',
-          path: 'project-detail',
-          component: 'resource/project/detail',
+          name: '服务详情',
+          path: 'project-detail/:id',
+          component: 'resource/project/Detail',
           componentName: null,
           icon: 'ep:grid',
           visible: false,
+          props: true,
+          breadcrumb: true,
           keepAlive: true,
           alwaysShow: false,
           children: null

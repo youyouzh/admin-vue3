@@ -9,6 +9,9 @@ export interface FormReqVO {
 }
 
 export const api = {
+  getAll: async () => {
+    return await request.get({ url: '/resources/agents', pageNo: 1, pageSize: 1000 })
+  },
   getPage: async (params: PageParam) => {
     return await request.get({ url: '/resources/agents', params })
   },
