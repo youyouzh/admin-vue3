@@ -7,7 +7,13 @@
     label-width="120px"
   >
     <el-form-item label="部署机器" prop="deployAgentIds">
-      <el-select v-model="formData.deployAgentIds" placeholder="请选择部署机器" clearable multiple>
+      <el-select
+        v-model="formData.deployAgentIds"
+        placeholder="请选择部署机器"
+        clearable
+        multiple
+        fit-input-width
+      >
         <el-option
           v-for="item in agentOptions"
           :key="item.id"
