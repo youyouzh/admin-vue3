@@ -27,15 +27,6 @@
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
-        <el-button
-          type="success"
-          plain
-          @click="handleExport"
-          :loading="exportLoading"
-          v-hasPermi="['resource:project:export']"
-        >
-          <Icon icon="ep:download" class="mr-5px" /> 导出
-        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -44,14 +35,10 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
       <el-table-column label="ID" align="center" prop="id" width="60" />
-      <el-table-column label="编号" align="center" prop="code" width="150" />
-      <el-table-column label="名称" align="center" prop="name" width="150" />
-      <el-table-column label="备注" align="center" prop="remark" width="200" />
-      <el-table-column label="状态" align="center" prop="projectState" width="150">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.DEPLOY_PROJECT_STATE" :value="scope.row.projectState" />
-        </template>
-      </el-table-column>
+      <el-table-column label="项目编号" align="center" prop="projectCode" width="150" />
+      <el-table-column label="版本号" align="center" prop="version" width="150" />
+      <el-table-column label="参考版本" align="center" prop="referenceVersion" width="150" />
+      <el-table-column label="变更日志" align="center" prop="changeLog" width="200" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -69,9 +56,7 @@
           >
             编辑
           </el-button>
-          <router-link :to="`/resource/project-detail/${scope.row.id}?code=${scope.row.code}`">
-            <el-button link type="primary">详情</el-button>
-          </router-link>
+          <el-button link type="success" @click="openDeployDialog(scope)">部署</el-button>
           <el-button
             link
             type="danger"
@@ -101,24 +86,25 @@
       :rules="formRules"
       label-width="80px"
     >
-      <el-form-item label="编号" prop="code">
-        <el-input v-model="formData.code" placeholder="请输入服务编号" />
+      <el-form-item label="版本号" prop="version">
+        <el-input v-model="formData.version" placeholder="请输入版本号" />
       </el-form-item>
-      <el-form-item label="名称" prop="name">
-        <el-input v-model="formData.name" placeholder="请输入名称" />
+      <el-form-item label="参考版本" prop="referenceVersion">
+        <el-input v-model="formData.referenceVersion" placeholder="请输入参考版本" />
       </el-form-item>
-      <el-form-item label="服务状态" prop="projectState">
-        <el-select v-model="formData.projectState" placeholder="请选择服务状态">
-          <el-option
-            v-for="item in getStrDictOptions(DICT_TYPE.DEPLOY_PROJECT_STATE)"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+      <el-form-item label="变更日志" prop="changeLog">
+        <el-input v-model="formData.changeLog" placeholder="请输入变更日志" type="textarea" />
       </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input v-model="formData.remark" placeholder="请输入服务备注" type="textarea" />
+      <el-form-item label="部署包" prop="deployFileUrl">
+        <UploadFile
+          v-model="formData.deployFileUrl"
+          title="上传部署包"
+          :isShowTip="false"
+          :fileSize="500"
+          :limit="1"
+          :drag="true"
+          :fileType="['zip', 'jar']"
+        />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -129,12 +115,16 @@
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
-import { api, FormReqVO } from '@/api/resource/project'
-import { DeployProjectState } from '@/utils/constants'
-import { DICT_TYPE, getStrDictOptions } from '@/utils/dict'
+import { api, FormReqVO } from '@/api/resource/project-version'
+import { propTypes } from '@/utils/propTypes'
 import { cloneDeep } from '@/utils'
+
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
+
+const props = defineProps({
+  projectDetail: propTypes.object
+})
 
 const loading = ref(true) // 列表的加载中
 const total = ref(0) // 列表的总页数
@@ -142,15 +132,15 @@ const list = ref([]) // 列表的数据
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  keyword: undefined
+  keyword: undefined,
+  projectId: props.projectDetail.id
 })
 const queryFormRef = ref() // 搜索的表单
-const exportLoading = ref(false) // 导出的加载中
 
 const getList = async () => {
   loading.value = true
   try {
-    const data = await api.getPage(queryParams)
+    const data = await api.getList(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -183,21 +173,6 @@ const handleDelete = async (id: number) => {
   } catch {}
 }
 
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    // const data = await AppApi.export(queryParams)
-    // download.excel(data, '岗位列表.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
-}
-
 /** 初始化 **/
 onMounted(() => {
   getList()
@@ -210,19 +185,24 @@ const formType = ref('') // 表单的类型：create - 新增；update - 修改
 
 const defaultFormData = {
   id: undefined,
-  code: undefined,
-  name: undefined,
-  remark: undefined,
-  projectState: DeployProjectState.ONLINE
+  projectId: props.projectDetail.id,
+  version: undefined,
+  referenceVersion: undefined,
+  changeLog: undefined,
+  deployFileUrl: undefined
 }
 const formRef = ref()
 const formData = ref(cloneDeep(defaultFormData))
 const formRules = reactive({
-  code: [{ required: true, message: '服务编号不能为空', trigger: 'blur' }],
-  name: [{ required: true, message: '服务名称不能为空', trigger: 'blur' }],
-  projectState: [{ required: true, message: '服务状态不能为空', trigger: 'change' }],
-  remark: [{ required: false, message: '服务备注不能为空', trigger: 'blur' }]
+  version: [{ required: true, message: '服务编号不能为空', trigger: 'blur' }],
+  referenceVersion: [{ required: true, message: '服务编号不能为空', trigger: 'blur' }],
+  changeLog: [{ required: true, message: '服务名称不能为空', trigger: 'blur' }],
+  remark: [{ required: false }]
 })
+
+const openDeployDialog = async (project: any) => {
+  console.log(project)
+}
 
 /** 打开弹窗 */
 const openDialog = async (type: string, id?: number) => {
