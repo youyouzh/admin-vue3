@@ -17,7 +17,7 @@
   </ContentWrap>
 </template>
 <script setup lang="ts" name="InfraDBDoc">
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import * as DbDocApi from '@/api/infra/dbDoc'
 
 const loading = ref(true) // 是否加载中

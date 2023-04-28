@@ -15,32 +15,7 @@ export type DictDataVO = {
 
 // 查询字典数据（精简)列表
 export const listSimpleDictData = () => {
-  return [
-    { dictType: 'common_state', value: 'ENABLED', label: '开启', colorType: '', cssClass: '' },
-    { dictType: 'common_state', value: 'DISABLED', label: '关闭', colorType: '', cssClass: '' },
-    {
-      dictType: 'deploy_project_state',
-      value: 'ONLINE',
-      label: '线上运行中',
-      colorType: '',
-      cssClass: ''
-    },
-    {
-      dictType: 'deploy_project_state',
-      value: 'OFFLINE',
-      label: '暂时下线',
-      colorType: '',
-      cssClass: ''
-    },
-    {
-      dictType: 'deploy_project_state',
-      value: 'DISCARD',
-      label: '废弃',
-      colorType: '',
-      cssClass: ''
-    }
-  ]
-  // return request.get({ url: '/system/dict-data/list-all-simple' })
+  return request.get({ url: '/system/dict-data/list-all-simple' })
 }
 
 // 查询字典数据列表

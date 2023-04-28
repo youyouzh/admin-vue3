@@ -64,6 +64,10 @@ export const generateRoute = (routes: AppCustomRouteRecordRaw[]): AppRouteRecord
   const res: AppRouteRecordRaw[] = []
   const modulesRoutesKeys = Object.keys(modules)
   for (const route of routes) {
+    // 设置默认值
+    route.alwaysShow = route.alwaysShow ?? true
+    route.keepAlive = route.keepAlive ?? true
+    route.visible = route.visible ?? true
     const meta = {
       title: route.name,
       icon: route.icon,

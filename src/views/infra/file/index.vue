@@ -70,6 +70,14 @@
         <template #default="scope">
           <el-button
             link
+            type="primary"
+            @click="handleDownload(scope.row.id, scope.row.name)"
+            v-hasPermi="['infra:file:download']"
+          >
+            下载
+          </el-button>
+          <el-button
+            link
             type="danger"
             @click="handleDelete(scope.row.id)"
             v-hasPermi="['infra:config:delete']"
@@ -94,8 +102,9 @@
 <script setup lang="ts" name="InfraFile">
 import { fileSizeFormatter } from '@/utils'
 import { dateFormatter } from '@/utils/formatTime'
-import * as FileApi from '@/api/infra/file'
+import { api } from '@/api/infra/file'
 import FileForm from './FileForm.vue'
+import { downloadByData } from '@/utils/download'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
@@ -115,7 +124,7 @@ const queryFormRef = ref() // 搜索的表单
 const getList = async () => {
   loading.value = true
   try {
-    const data = await FileApi.getFilePage(queryParams)
+    const data = await api.getPage(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -141,13 +150,23 @@ const openForm = () => {
   formRef.value.open()
 }
 
+const handleDownload = async (id: number, filename: string) => {
+  try {
+    // 下载的二次确认
+    await message.confirm('确认下载该文件')
+    // 下载
+    const data = await api.download(id)
+    downloadByData(data, filename)
+  } catch {}
+}
+
 /** 删除按钮操作 */
 const handleDelete = async (id: number) => {
   try {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await FileApi.deleteFile(id)
+    await api.delete(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()

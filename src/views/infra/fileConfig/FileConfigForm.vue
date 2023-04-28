@@ -28,67 +28,28 @@
         </el-select>
       </el-form-item>
       <!-- DB -->
-      <!-- Local / FTP / SFTP -->
-      <el-form-item
-        v-if="formData.storage >= 10 && formData.storage <= 12"
-        label="基础路径"
-        prop="config.basePath"
-      >
-        <el-input v-model="formData.config.basePath" placeholder="请输入基础路径" />
-      </el-form-item>
-      <el-form-item
-        v-if="formData.storage >= 11 && formData.storage <= 12"
-        label="主机地址"
-        prop="config.host"
-      >
-        <el-input v-model="formData.config.host" placeholder="请输入主机地址" />
-      </el-form-item>
-      <el-form-item
-        v-if="formData.storage >= 11 && formData.storage <= 12"
-        label="主机端口"
-        prop="config.port"
-      >
-        <el-input-number v-model="formData.config.port" :min="0" placeholder="请输入主机端口" />
-      </el-form-item>
-      <el-form-item
-        v-if="formData.storage >= 11 && formData.storage <= 12"
-        label="用户名"
-        prop="config.username"
-      >
-        <el-input v-model="formData.config.username" placeholder="请输入密码" />
-      </el-form-item>
-      <el-form-item
-        v-if="formData.storage >= 11 && formData.storage <= 12"
-        label="密码"
-        prop="config.password"
-      >
-        <el-input v-model="formData.config.password" placeholder="请输入密码" />
-      </el-form-item>
-      <el-form-item v-if="formData.storage === 11" label="连接模式" prop="config.mode">
-        <el-radio-group v-model="formData.config.mode">
-          <el-radio key="Active" label="Active">主动模式</el-radio>
-          <el-radio key="Passive" label="Passive">主动模式</el-radio>
-        </el-radio-group>
-      </el-form-item>
+      <!-- Local -->
+      <template v-if="formData.storage === 'LOCAL'">
+        <el-form-item label="基础路径" prop="config.basePath">
+          <el-input v-model="formData.config.basePath" placeholder="请输入基础路径" />
+        </el-form-item>
+      </template>
       <!-- S3 -->
-      <el-form-item v-if="formData.storage === 20" label="节点地址" prop="config.endpoint">
-        <el-input v-model="formData.config.endpoint" placeholder="请输入节点地址" />
-      </el-form-item>
-      <el-form-item v-if="formData.storage === 20" label="存储 bucket" prop="config.bucket">
-        <el-input v-model="formData.config.bucket" placeholder="请输入 bucket" />
-      </el-form-item>
-      <el-form-item v-if="formData.storage === 20" label="accessKey" prop="config.accessKey">
-        <el-input v-model="formData.config.accessKey" placeholder="请输入 accessKey" />
-      </el-form-item>
-      <el-form-item v-if="formData.storage === 20" label="accessSecret" prop="config.accessSecret">
-        <el-input v-model="formData.config.accessSecret" placeholder="请输入 accessSecret" />
-      </el-form-item>
-      <!-- 通用 -->
-      <el-form-item v-if="formData.storage === 20" label="自定义域名">
-        <!-- 无需参数校验，所以去掉 prop -->
-        <el-input v-model="formData.config.domain" placeholder="请输入自定义域名" />
-      </el-form-item>
-      <el-form-item v-else-if="formData.storage" label="自定义域名" prop="config.domain">
+      <template v-if="formData.storage === 'S3'">
+        <el-form-item label="节点地址" prop="config.endpoint">
+          <el-input v-model="formData.config.endpoint" placeholder="请输入节点地址" />
+        </el-form-item>
+        <el-form-item label="存储 bucket" prop="config.bucket">
+          <el-input v-model="formData.config.bucket" placeholder="请输入 bucket" />
+        </el-form-item>
+        <el-form-item label="accessKey" prop="config.accessKey">
+          <el-input v-model="formData.config.accessKey" placeholder="请输入 accessKey" />
+        </el-form-item>
+        <el-form-item label="accessSecret" prop="config.accessSecret">
+          <el-input v-model="formData.config.accessSecret" placeholder="请输入 accessSecret" />
+        </el-form-item>
+      </template>
+      <el-form-item v-if="formData.storage" label="自定义域名" prop="config.domain">
         <el-input v-model="formData.config.domain" placeholder="请输入自定义域名" />
       </el-form-item>
     </el-form>
@@ -100,7 +61,7 @@
 </template>
 <script lang="ts" name="InfraFileConfigForm" setup>
 import { DICT_TYPE, getDictOptions } from '@/utils/dict'
-import * as FileConfigApi from '@/api/infra/fileConfig'
+import { api, FileConfigVO } from '@/api/infra/fileConfig'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -109,13 +70,7 @@ const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
-const formData = ref({
-  id: undefined,
-  name: '',
-  storage: '',
-  remark: '',
-  config: {}
-})
+const formData = ref<FileConfigVO>({})
 const formRules = reactive({
   name: [{ required: true, message: '配置名不能为空', trigger: 'blur' }],
   storage: [{ required: true, message: '存储器不能为空', trigger: 'change' }],
@@ -145,7 +100,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await FileConfigApi.getFileConfig(id)
+      formData.value = await api.getDetail(id)
     } finally {
       formLoading.value = false
     }
@@ -163,12 +118,12 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as unknown as FileConfigApi.FileConfigVO
+    const data = formData.value as unknown as FileConfigVO
     if (formType.value === 'create') {
-      await FileConfigApi.createFileConfig(data)
+      await api.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await FileConfigApi.updateFileConfig(data)
+      await api.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
@@ -182,7 +137,6 @@ const submitForm = async () => {
 /** 重置表单 */
 const resetForm = () => {
   formData.value = {
-    id: undefined,
     name: '',
     storage: '',
     remark: '',

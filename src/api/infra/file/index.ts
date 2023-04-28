@@ -1,4 +1,5 @@
 import request from '@/config/axios'
+import { config } from '@/config/axios/config'
 
 export interface FilePageReqVO extends PageParam {
   path?: string
@@ -6,12 +7,18 @@ export interface FilePageReqVO extends PageParam {
   createdAt?: Date[]
 }
 
-// 查询文件列表
-export const getFilePage = (params: FilePageReqVO) => {
-  return request.get({ url: '/infra/file/page', params })
+export const getUploadPath = (): string => {
+  return config.base_url + '/infra/file/upload'
 }
 
-// 删除文件
-export const deleteFile = (id: number) => {
-  return request.delete({ url: '/infra/file/delete?id=' + id })
+export const api = {
+  getPage: (params: FilePageReqVO) => {
+    return request.get({ url: '/infra/file/page', params })
+  },
+  download: (id: number) => {
+    return request.download({ url: '/infra/file/download/' + id })
+  },
+  delete: (id: number) => {
+    return request.delete({ url: '/infra/file/delete?id=' + id })
+  }
 }

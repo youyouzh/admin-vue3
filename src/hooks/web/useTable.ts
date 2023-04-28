@@ -1,10 +1,10 @@
-import download from '@/utils/download'
 import { Table, TableExpose } from '@/components/Table'
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { computed, nextTick, reactive, ref, unref, watch } from 'vue'
 import type { TableProps } from '@/components/Table/src/types'
 
 import { TableSetPropsType } from '@/types/table'
+import { downloadByData } from '@/utils/download'
 
 const { t } = useI18n()
 interface ResponseType<T = any> {
@@ -203,7 +203,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
         .then(async () => {
           const res = await config?.exportListApi?.(unref(paramsObj) as unknown as T)
           if (res) {
-            download.excel(res as unknown as Blob, fileName)
+            downloadByData(res as unknown as Blob, fileName, 'application/vnd.ms-excel')
           }
         })
         .finally(() => {

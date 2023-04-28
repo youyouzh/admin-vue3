@@ -124,7 +124,7 @@
 <script setup lang="ts" name="InfraJobLog">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import JobLogDetail from './JobLogDetail.vue'
 import * as JobLogApi from '@/api/infra/jobLog'
 const message = useMessage() // 消息弹窗

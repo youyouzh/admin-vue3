@@ -34,9 +34,9 @@
 </template>
 <script setup lang="ts" name="UploadFile">
 import { PropType } from 'vue'
-
 import { propTypes } from '@/utils/propTypes'
 import { getAccessToken, getTenantId } from '@/utils/auth'
+import { getUploadPath } from '@/api/infra/file'
 import type { UploadInstance, UploadUserFile, UploadProps, UploadRawFile } from 'element-plus'
 
 const message = useMessage() // 消息弹窗
@@ -48,7 +48,7 @@ const props = defineProps({
     required: true
   },
   title: propTypes.string.def('文件上传'),
-  updateUrl: propTypes.string.def(import.meta.env.VITE_UPLOAD_URL),
+  updateUrl: propTypes.string.def(getUploadPath()),
   fileType: propTypes.array.def(['doc', 'xls', 'ppt', 'txt', 'pdf']), // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileSize: propTypes.number.def(5), // 大小限制(MB)
   limit: propTypes.number.def(5), // 数量限制

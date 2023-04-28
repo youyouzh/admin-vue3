@@ -13,15 +13,13 @@
       :on-error="submitFormError"
       :on-exceed="handleExceed"
       :on-success="submitFormSuccess"
-      accept=".jpg, .png, .gif"
+      accept=".zip, .jar"
       drag
     >
       <i class="el-icon-upload"></i>
       <div class="el-upload__text"> 将文件拖到此处，或 <em>点击上传</em></div>
       <template #tip>
-        <div class="el-upload__tip" style="color: red">
-          提示：仅允许导入 jpg、png、gif 格式文件！
-        </div>
+        <div class="el-upload__tip" style="color: red"> 提示：仅允许导入 zip、jar 格式文件！ </div>
       </template>
     </el-upload>
     <template #footer>
@@ -32,13 +30,15 @@
 </template>
 <script lang="ts" name="InfraFileForm" setup>
 import { getAccessToken, getTenantId } from '@/utils/auth'
+import { getUploadPath } from '@/api/infra/file'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中
-const url = import.meta.env.VITE_UPLOAD_URL
+const url = getUploadPath()
+console.log(url)
 const uploadHeaders = ref() // 上传 Header 头
 const fileList = ref([]) // 文件列表
 const data = ref({ path: '' })

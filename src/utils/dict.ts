@@ -90,9 +90,13 @@ export const getDictLabel = (dictType: string, value: any) => {
 export enum DICT_TYPE {
   // ========== SYSTEM 模块 ==========
   COMMON_STATE = 'common_state',
+  BOOLEAN_STRING = 'boolean_string',
 
   // ========== MONITOR 模块 ==========
   DEPLOY_PROJECT_STATE = 'deploy_project_state',
+
+  // ========== INFRA 模块 ==========
+  INFRA_FILE_STORAGE = 'infra_file_storage',
 
   USER_TYPE = 'user_type',
   COMMON_STATUS = 'common_status',
@@ -116,7 +120,6 @@ export enum DICT_TYPE {
   SYSTEM_MAIL_SEND_STATUS = 'system_mail_send_status',
   SYSTEM_NOTIFY_TEMPLATE_TYPE = 'system_notify_template_type',
 
-  // ========== INFRA 模块 ==========
   INFRA_BOOLEAN_STRING = 'infra_boolean_string',
   INFRA_JOB_STATUS = 'infra_job_status',
   INFRA_JOB_LOG_STATUS = 'infra_job_log_status',
@@ -125,7 +128,6 @@ export enum DICT_TYPE {
   INFRA_CODEGEN_TEMPLATE_TYPE = 'infra_codegen_template_type',
   INFRA_CODEGEN_FRONT_TYPE = 'infra_codegen_front_type',
   INFRA_CODEGEN_SCENE = 'infra_codegen_scene',
-  INFRA_FILE_STORAGE = 'infra_file_storage',
 
   // ========== MP 模块 ==========
   MP_AUTO_REPLY_REQUEST_MATCH = 'mp_auto_reply_request_match', // 自动回复请求匹配类型

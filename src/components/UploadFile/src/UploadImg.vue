@@ -52,7 +52,7 @@
 
 <script setup lang="ts" name="UploadImg">
 import type { UploadProps } from 'element-plus'
-
+import { getUploadPath } from '@/api/infra/file'
 import { generateUUID } from '@/utils'
 import { propTypes } from '@/utils/propTypes'
 import { getAccessToken, getTenantId } from '@/utils/auth'
@@ -72,7 +72,7 @@ type FileTypes =
 // 接受父组件参数
 const props = defineProps({
   modelValue: propTypes.string.def(''),
-  updateUrl: propTypes.string.def(import.meta.env.VITE_UPLOAD_URL),
+  updateUrl: propTypes.string.def(getUploadPath()),
   drag: propTypes.bool.def(true), // 是否支持拖拽上传 ==> 非必传（默认为 true）
   disabled: propTypes.bool.def(false), // 是否禁用上传组件 ==> 非必传（默认为 false）
   fileSize: propTypes.number.def(5), // 图片大小限制 ==> 非必传（默认为 5M）

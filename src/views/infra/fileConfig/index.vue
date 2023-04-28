@@ -27,7 +27,7 @@
           class="!w-240px"
         >
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.INFRA_FILE_STORAGE)"
+            v-for="dict in getStrDictOptions(DICT_TYPE.INFRA_FILE_STORAGE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -63,7 +63,7 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
-      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="ID" align="center" prop="id" />
       <el-table-column label="配置名" align="center" prop="name" />
       <el-table-column label="存储器" align="center" prop="storage">
         <template #default="scope">
@@ -71,9 +71,9 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="主配置" align="center" prop="primary">
+      <el-table-column label="是否主配置" align="center" prop="primary">
         <template #default="scope">
-          <dict-tag :type="DICT_TYPE.INFRA_BOOLEAN_STRING" :value="scope.row.master" />
+          <dict-tag :type="DICT_TYPE.BOOLEAN_STRING" :value="scope.row.master" />
         </template>
       </el-table-column>
       <el-table-column
@@ -100,7 +100,7 @@
             @click="handleMaster(scope.row.id)"
             v-hasPermi="['infra:file-config:update']"
           >
-            主配置
+            设为主配置
           </el-button>
           <el-button link type="primary" @click="handleTest(scope.row.id)"> 测试 </el-button>
           <el-button
@@ -127,9 +127,9 @@
   <FileConfigForm ref="formRef" @success="getList" />
 </template>
 <script setup lang="ts" name="InfraFileConfig">
-import * as FileConfigApi from '@/api/infra/fileConfig'
+import { api } from '@/api/infra/fileConfig'
 import FileConfigForm from './FileConfigForm.vue'
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getStrDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
@@ -150,7 +150,7 @@ const queryFormRef = ref() // 搜索的表单
 const getList = async () => {
   loading.value = true
   try {
-    const data = await FileConfigApi.getFileConfigPage(queryParams)
+    const data = await api.getPage(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -182,7 +182,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await FileConfigApi.deleteFileConfig(id)
+    await api.delete(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()
@@ -193,7 +193,7 @@ const handleDelete = async (id: number) => {
 const handleMaster = async (id) => {
   try {
     await message.confirm('是否确认修改配置编号为"' + id + '"的数据项为主配置?')
-    await FileConfigApi.updateFileConfigMaster(id)
+    await api.updateMaster(id)
     message.success(t('common.updateSuccess'))
     await getList()
   } catch {}
@@ -202,7 +202,7 @@ const handleMaster = async (id) => {
 /** 测试按钮操作 */
 const handleTest = async (id) => {
   try {
-    const response = await FileConfigApi.testFileConfig(id)
+    const response = await api.test(id)
     message.alert('测试通过，上传文件成功！访问地址：' + response)
   } catch {}
 }

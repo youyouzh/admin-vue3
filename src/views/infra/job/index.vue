@@ -152,7 +152,7 @@ import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { checkPermi } from '@/utils/permission'
 import JobForm from './JobForm.vue'
 import JobDetail from './JobDetail.vue'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import * as JobApi from '@/api/infra/job'
 import { InfraJobStatusEnum } from '@/utils/constants'
 const { t } = useI18n() // 国际化

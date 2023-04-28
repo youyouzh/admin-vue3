@@ -39,69 +39,44 @@ export const getInfo = () => {
 
 // 路由
 export const getAsyncRoutes = () => {
+  // 根据这个路由初始化 system_menu
   return [
     {
-      id: 1,
-      parentId: 0,
       name: '资源管理',
       path: '/resource',
-      component: null,
-      componentName: null,
       icon: 'ep:folder',
-      visible: true,
-      keepAlive: true,
-      alwaysShow: true,
       children: [
         {
-          id: 100,
-          parentId: 1,
           name: '应用管理',
           path: 'app',
           component: 'resource/app/index',
           componentName: null,
           icon: 'ep:grid',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 101,
-          parentId: 1,
           name: 'agent管理',
           path: 'agent',
           component: 'resource/agent/index',
           componentName: null,
           icon: 'ep:grid',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 102,
-          parentId: 1,
           name: '服务管理',
           path: 'project',
           component: 'resource/project/index',
           componentName: null,
           icon: 'ep:grid',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 102,
-          parentId: 1,
           name: '服务详情',
           path: 'project-detail/:id',
           component: 'resource/project/Detail',
           componentName: null,
           icon: 'ep:grid',
           visible: false,
-          props: true,
-          breadcrumb: true,
           keepAlive: true,
           alwaysShow: false,
           children: null
@@ -109,120 +84,87 @@ export const getAsyncRoutes = () => {
       ]
     },
     {
-      id: 1,
-      parentId: 0,
       name: '部署管理',
       path: '/deploy',
-      component: null,
-      componentName: null,
       icon: 'ep:mostly-cloudy',
-      visible: true,
-      keepAlive: true,
-      alwaysShow: true,
       children: [
         {
-          id: 100,
-          parentId: 1,
           name: '部署任务',
           path: 'task',
           component: 'deploy/task/index',
           componentName: null,
           icon: 'ep:data-line',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 101,
-          parentId: 1,
           name: '批量部署任务',
           path: 'batch-task',
           component: 'deploy/batchTask/index',
           componentName: null,
           icon: 'ep:data-analysis',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         }
       ]
     },
     {
-      id: 1,
-      parentId: 0,
       name: '系统管理',
       path: '/system',
-      component: null,
-      componentName: null,
       icon: 'ep:tools',
-      visible: true,
-      keepAlive: true,
-      alwaysShow: true,
       children: [
         {
-          id: 100,
-          parentId: 1,
           name: '用户管理',
           path: 'user',
           component: 'system/user/index',
-          componentName: null,
           icon: 'ep:avatar',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 101,
-          parentId: 1,
           name: '角色管理',
           path: 'role',
           component: 'system/role/index',
-          componentName: null,
           icon: 'ep:user-filled',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 102,
-          parentId: 1,
           name: '菜单管理',
           path: 'menu',
           component: 'system/menu/index',
-          componentName: null,
           icon: 'ep:grid',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 105,
-          parentId: 1,
           name: '字典管理',
           path: 'dict',
           component: 'system/dict/index',
-          componentName: null,
           icon: 'ep:list',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
           children: null
         },
         {
-          id: 107,
-          parentId: 1,
           name: '通知公告',
           path: 'notice',
           component: 'system/notice/index',
-          componentName: null,
           icon: 'ep:bell-filled',
-          visible: true,
-          keepAlive: true,
-          alwaysShow: true,
+          children: null
+        }
+      ]
+    },
+    {
+      name: '基础设施',
+      path: '/infra',
+      icon: 'ep:monitor',
+      children: [
+        {
+          name: '文件配置',
+          path: 'file-condig',
+          component: 'infra/fileConfig/index',
+          icon: 'ep:files',
+          children: null
+        },
+        {
+          name: '文件管理',
+          path: 'file',
+          component: 'infra/file/index',
+          icon: 'ep:upload',
           children: null
         }
       ]

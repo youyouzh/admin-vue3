@@ -114,7 +114,7 @@
 <script setup lang="tsx" name="SystemPost">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import * as PostApi from '@/api/system/post'
 import PostForm from './PostForm.vue'
 const message = useMessage() // 消息弹窗

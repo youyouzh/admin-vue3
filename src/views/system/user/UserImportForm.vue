@@ -43,7 +43,7 @@
 <script lang="ts" name="SystemUserImportForm" setup>
 import * as UserApi from '@/api/system/user'
 import { getAccessToken, getTenantId } from '@/utils/auth'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 
 const message = useMessage() // 消息弹窗
 
@@ -51,7 +51,7 @@ const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中
 const uploadRef = ref()
 const importUrl =
-  import.meta.env.VITE_BASE_URL + import.meta.env.VITE_API_URL + '/system/user/import'
+  import.meta.env.VITE_BASE_URL + import.meta.env.VITE_API_PREFIX + '/system/user/import'
 const uploadHeaders = ref() // 上传 Header 头
 const fileList = ref([]) // 文件列表
 const updateSupport = ref(0) // 是否更新已经存在的用户数据

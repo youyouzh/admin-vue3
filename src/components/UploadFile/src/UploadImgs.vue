@@ -49,9 +49,9 @@
 import { PropType } from 'vue'
 import { ElNotification } from 'element-plus'
 import type { UploadProps, UploadFile, UploadUserFile } from 'element-plus'
-
 import { propTypes } from '@/utils/propTypes'
 import { getAccessToken, getTenantId } from '@/utils/auth'
+import { getUploadPath } from '@/api/infra/file'
 
 const message = useMessage() // 消息弹窗
 
@@ -72,7 +72,7 @@ const props = defineProps({
     type: Array as PropType<UploadUserFile[]>,
     required: true
   },
-  updateUrl: propTypes.string.def(import.meta.env.VITE_UPLOAD_URL),
+  updateUrl: propTypes.string.def(getUploadPath()),
   drag: propTypes.bool.def(true), // 是否支持拖拽上传 ==> 非必传（默认为 true）
   disabled: propTypes.bool.def(false), // 是否禁用上传组件 ==> 非必传（默认为 false）
   limit: propTypes.number.def(5), // 最大图片上传数 ==> 非必传（默认为 5张）

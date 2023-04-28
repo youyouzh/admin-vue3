@@ -140,7 +140,7 @@
 <script setup lang="ts" name="SystemErrorCode">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import * as ErrorCodeApi from '@/api/system/errorCode'
 import ErrorCodeForm from './ErrorCodeForm.vue'
 const message = useMessage() // 消息弹窗

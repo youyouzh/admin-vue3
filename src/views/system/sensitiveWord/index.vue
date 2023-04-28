@@ -155,7 +155,7 @@
 <script lang="ts" name="SystemSensitiveWordHao" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import * as SensitiveWordApi from '@/api/system/sensitiveWord'
 import SensitiveWordForm from './SensitiveWordForm.vue'
 import SensitiveWordTestForm from './SensitiveWordTestForm.vue'

@@ -141,7 +141,7 @@
 </template>
 <script setup lang="ts" name="InfraApiAccessLog">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import { formatDate } from '@/utils/formatTime'
 import * as ApiAccessLogApi from '@/api/infra/apiAccessLog'
 import ApiAccessLogDetail from './ApiAccessLogDetail.vue'

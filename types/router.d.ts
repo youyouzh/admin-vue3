@@ -73,9 +73,9 @@ declare global {
     path: string
     redirect: string
     children?: AppCustomRouteRecordRaw[]
-    keepAlive?: boolean
-    visible?: boolean
+    keepAlive?: boolean = true
+    visible?: boolean = true
     parentId?: number
-    alwaysShow?: boolean
+    alwaysShow?: boolean = true
   }
 }

@@ -151,7 +151,7 @@
 </template>
 <script lang="ts" name="InfraCodegen" setup>
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
+import { download } from '@/utils/download'
 import * as CodegenApi from '@/api/infra/codegen'
 import * as DataSourceConfigApi from '@/api/infra/dataSourceConfig'
 import ImportTable from './ImportTable.vue'
