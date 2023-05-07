@@ -42,6 +42,7 @@ export const getAsyncRoutes = () => {
   // 根据这个路由初始化 system_menu
   return [
     {
+      parentId: 0,
       name: '资源管理',
       path: '/resource',
       icon: 'ep:folder',
@@ -73,7 +74,7 @@ export const getAsyncRoutes = () => {
         {
           name: '服务详情',
           path: 'project-detail/:id',
-          component: 'resource/project/Detail',
+          component: 'resource/project/detail',
           componentName: null,
           icon: 'ep:grid',
           visible: false,
@@ -84,6 +85,7 @@ export const getAsyncRoutes = () => {
       ]
     },
     {
+      parentId: 0,
       name: '部署管理',
       path: '/deploy',
       icon: 'ep:mostly-cloudy',
@@ -107,6 +109,7 @@ export const getAsyncRoutes = () => {
       ]
     },
     {
+      parentId: 0,
       name: '系统管理',
       path: '/system',
       icon: 'ep:tools',
@@ -149,6 +152,7 @@ export const getAsyncRoutes = () => {
       ]
     },
     {
+      parentId: 0,
       name: '基础设施',
       path: '/infra',
       icon: 'ep:monitor',
