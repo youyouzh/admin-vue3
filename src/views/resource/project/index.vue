@@ -121,7 +121,7 @@
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
-import { api, FormReqVO } from '@/api/resource/project'
+import { api, ProjectVO } from '@/api/resource/project'
 import { DeployProjectState } from '@/utils/constants'
 import { DICT_TYPE, getStrDictOptions } from '@/utils/dict'
 import { cloneDeep } from '@/utils'
@@ -242,7 +242,7 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as unknown as FormReqVO
+    const data = formData.value as unknown as ProjectVO
     if (formType.value === 'create') {
       await api.create(data)
       message.success(t('common.createSuccess'))

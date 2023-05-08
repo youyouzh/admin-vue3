@@ -124,7 +124,7 @@
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
-import { api, FormReqVO } from '@/api/resource/agent'
+import { api, AgentVO } from '@/api/resource/agent'
 import { CommonState } from '@/utils/constants'
 import { cloneDeep } from '@/utils'
 const message = useMessage() // 消息弹窗
@@ -243,7 +243,7 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as unknown as FormReqVO
+    const data = formData.value as unknown as AgentVO
     if (formType.value === 'create') {
       await api.create(data)
       message.success(t('common.createSuccess'))

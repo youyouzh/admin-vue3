@@ -34,8 +34,8 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
-      <el-table-column label="ID" align="center" prop="id" width="60" />
-      <el-table-column label="项目编号" align="center" prop="projectCode" width="150" />
+      <el-table-column label="ID" align="center" prop="id" min-width="60" />
+      <el-table-column label="项目编号" align="center" prop="projectCode" min-width="150" />
       <el-table-column label="版本号" align="center" prop="version" width="150" />
       <el-table-column label="参考版本" align="center" prop="referenceVersion" width="150" />
       <el-table-column label="变更日志" align="center" prop="changeLog" width="200" />
@@ -99,7 +99,7 @@
         <UploadFile
           v-model="formData.deployFileUrl"
           title="上传部署包"
-          :isShowTip="false"
+          :isShowTip="true"
           :fileSize="500"
           :limit="1"
           :drag="true"

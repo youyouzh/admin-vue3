@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 
-export interface FormReqVO {
+export interface AgentVO {
   id?: number
   name: string
   ip: string
@@ -8,23 +8,26 @@ export interface FormReqVO {
   createdAt: Date
 }
 
+const basePath = '/resources/agents'
+
 export const api = {
   getAll: async () => {
-    return await request.get({ url: '/resources/agents', pageNo: 1, pageSize: 1000 })
+    const data = await request.get({ url: basePath, pageNo: 1, pageSize: 500 })
+    return data.list
   },
   getPage: async (params: PageParam) => {
-    return await request.get({ url: '/resources/agents', params })
+    return await request.get({ url: basePath, params })
   },
   getDetail: async (id: number) => {
-    return await request.get({ url: '/resources/agents/' + id })
+    return await request.get({ url: `${basePath}/${id}` })
   },
-  create: async (data: FormReqVO) => {
-    return await request.post({ url: '/resources/agents', data: data })
+  create: async (data: AgentVO) => {
+    return await request.post({ url: basePath, data: data })
   },
-  update: async (params: FormReqVO) => {
-    return await request.put({ url: '/resources/agents', data: params })
+  update: async (params: AgentVO) => {
+    return await request.put({ url: basePath, data: params })
   },
   delete: async (id: number) => {
-    return await request.delete({ url: '/resources/agents/' + id })
+    return await request.delete({ url: `${basePath}/${id}` })
   }
 }

@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 
-export interface FormReqVO {
+export interface ProjectVersionVO {
   id?: number
   projectId: number
   version: string
@@ -10,20 +10,26 @@ export interface FormReqVO {
   createdAt: Date
 }
 
+const basePath = '/resources/project-versions'
+
 export const api = {
-  getList: async (params: PageParam) => {
-    return await request.get({ url: '/resources/project-versions', params })
+  getAll: async () => {
+    const data = await request.get({ url: basePath, pageNo: 1, pageSize: 500 })
+    return data.list
+  },
+  getPage: async (params: PageParam) => {
+    return await request.get({ url: basePath, params })
   },
   getDetail: async (id: number) => {
-    return await request.get({ url: '/resources/project-versions/' + id })
+    return await request.get({ url: `${basePath}/${id}` })
   },
-  create: async (data: FormReqVO) => {
-    return await request.post({ url: '/resources/project-versions', data: data })
+  create: async (data: ProjectVersionVO) => {
+    return await request.post({ url: basePath, data: data })
   },
-  update: async (params: FormReqVO) => {
-    return await request.put({ url: '/resources/project-versions', data: params })
+  update: async (params: ProjectVersionVO) => {
+    return await request.put({ url: basePath, data: params })
   },
   delete: async (id: number) => {
-    return await request.delete({ url: '/resources/project-versions/' + id })
+    return await request.delete({ url: `${basePath}/${id}` })
   }
 }

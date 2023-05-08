@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 
-export interface FormReqVO {
+export interface DeployTaskVO {
   id?: number
   name: string
   code: string
@@ -9,20 +9,29 @@ export interface FormReqVO {
   createdAt: Date
 }
 
+const basePath = '/deploy/tasks'
+
 export const api = {
+  getAll: async () => {
+    const data = await request.get({ url: basePath, pageNo: 1, pageSize: 500 })
+    return data.list
+  },
   getPage: async (params: PageParam) => {
-    return await request.get({ url: '/deploy/tasks', params })
+    return await request.get({ url: basePath, params })
   },
   getDetail: async (id: number) => {
-    return await request.get({ url: '/deploy/tasks/' + id })
+    return await request.get({ url: `${basePath}/${id}` })
   },
-  create: async (data: FormReqVO) => {
-    return await request.post({ url: '/deploy/tasks', data: data })
+  create: async (data: DeployTaskVO) => {
+    return await request.post({ url: basePath, data: data })
   },
-  update: async (params: FormReqVO) => {
-    return await request.put({ url: '/deploy/tasks', data: params })
+  update: async (params: DeployTaskVO) => {
+    return await request.put({ url: basePath, data: params })
   },
   delete: async (id: number) => {
-    return await request.delete({ url: '/deploy/tasks/' + id })
+    return await request.delete({ url: `${basePath}/${id}` })
+  },
+  runDeploy: async (id: number) => {
+    return await request.put({ url: `/deploy/run-tasks/${id}` })
   }
 }

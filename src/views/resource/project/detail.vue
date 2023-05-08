@@ -13,9 +13,9 @@
     <el-tab-pane label="部署包管理">
       <ProjectVersion :project-detail="projectDetail" />
     </el-tab-pane>
-    <el-tab-pane label="部署任务详情">
+    <!-- <el-tab-pane label="部署任务详情">
       <DeployTask :project-detail="projectDetail" />
-    </el-tab-pane>
+    </el-tab-pane> -->
   </el-tabs>
 </template>
 <script setup lang="tsx">
@@ -25,7 +25,6 @@ import { api } from '@/api/resource/project'
 import ConfigFileForm from './ConfigFileForm.vue'
 import DeployConfigForm from './DeployConfigForm.vue'
 import ProjectVersion from './ProjectVersion.vue'
-import DeployTask from './DeployTask.vue'
 
 // 从路由中获取项目id参数
 const projectId = parseInt(useRoute().params.id + '')

@@ -111,7 +111,7 @@
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
-import { api, FormReqVO } from '@/api/resource/app'
+import { api, AppVO } from '@/api/resource/app'
 import { cloneDeep } from '@/utils'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
@@ -228,7 +228,7 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as unknown as FormReqVO
+    const data = formData.value as unknown as AppVO
     if (formType.value === 'create') {
       await api.create(data)
       message.success(t('common.createSuccess'))
