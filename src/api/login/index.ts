@@ -101,7 +101,7 @@ export const getAsyncRoutes = () => {
         {
           name: '批量部署任务',
           path: 'batch-task',
-          component: 'deploy/batchTask/index',
+          component: 'deploy/batch-task/index',
           componentName: null,
           icon: 'ep:data-analysis',
           children: null

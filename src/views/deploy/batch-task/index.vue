@@ -8,11 +8,8 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="部署项目" prop="projectId">
-        <ProjectSelect v-model="queryParams.projectId" />
-      </el-form-item>
-      <el-form-item label="部署机器" prop="agentId">
-        <AgentSelect v-model="queryParams.agentId" :multi="false" />
+      <el-form-item label="关键词" prop="name">
+        <el-input v-model="queryParams.keyword" placeholder="请输入关键词" clearable />
       </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
@@ -33,19 +30,8 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list">
       <el-table-column label="ID" align="center" prop="id" width="60" />
-      <el-table-column label="项目" align="center" prop="deployProject.code" width="150" />
+      <el-table-column label="部署标题" align="center" prop="title" width="150" />
       <el-table-column label="修改日志" align="center" prop="changeLog" width="200" />
-      <el-table-column label="部署机器" align="center" prop="deployAgent" width="200">
-        <template #default="scope">
-          <el-text>{{ `${scope.row.deployAgent.name}(${scope.row.deployAgent.ip}))` }}</el-text>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="部署版本"
-        align="center"
-        prop="deployProjectVersion.version"
-        width="150"
-      />
       <el-table-column
         label="部署开始时间"
         align="center"
@@ -71,10 +57,10 @@
           <el-button
             link
             type="primary"
-            @click="openForm('update', scope.row.id)"
             v-hasPermi="['resource:project:update']"
+            @click="handleRunDeploy(scope.row.id)"
           >
-            编辑
+            重新部署
           </el-button>
           <el-button
             link
@@ -82,7 +68,7 @@
             v-hasPermi="['resource:project:update']"
             @click="handleRunDeploy(scope.row.id)"
           >
-            重新部署
+            部署详情
           </el-button>
           <el-button
             link
@@ -105,23 +91,14 @@
   </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
-  <DeployTaskForm ref="formRef" @success="getList" />
+  <BatchDeployTaskForm ref="formRef" @success="getList" />
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
-import { api } from '@/api/deploy/task'
-import DeployTaskForm from './DeployTaskForm.vue'
-import ProjectSelect from './ProjectSelect.vue'
-import AgentSelect from './AgentSelect.vue'
-import { propTypes } from '@/utils/propTypes'
+import { api } from '@/api/deploy/batch-task'
+import BatchDeployTaskForm from './BatchDeployTaskForm.vue'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
-
-const props = defineProps({
-  projectId: propTypes.number,
-  agentId: propTypes.number,
-  batchTaskId: propTypes.number
-})
 
 const loading = ref(true) // 列表的加载中
 const total = ref(0) // 列表的总页数
@@ -129,9 +106,7 @@ const list = ref([]) // 列表的数据
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  projectId: ref(props.projectId),
-  agentId: ref(props.agentId),
-  batchTaskId: ref(props.batchTaskId)
+  keyword: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 
@@ -178,11 +153,9 @@ const handleDelete = async (id: number) => {
 
 const handleRunDeploy = async (id: number) => {
   try {
-    // 二次确认
     await message.confirm('确认立即重新部署吗？')
     await api.runDeploy(id)
     message.success(t('common.delSuccess'))
-    // 刷新列表
     await getList()
   } catch {}
 }

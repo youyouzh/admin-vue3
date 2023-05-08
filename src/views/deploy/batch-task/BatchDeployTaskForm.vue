@@ -7,14 +7,8 @@
       :rules="formRules"
       label-width="80px"
     >
-      <el-form-item label="部署项目" prop="projectId">
-        <ProjectSelect v-model="formData.projectId" />
-      </el-form-item>
-      <el-form-item label="部署机器" prop="agentId">
-        <AgentSelect v-model="formData.agentId" :multi="false" />
-      </el-form-item>
-      <el-form-item label="部署版本" prop="projectVersionId">
-        <ProjectVersionSelect v-model="formData.projectVersionId" />
+      <el-form-item label="任务标题" prop="title">
+        <el-input v-model="formData.title" placeholder="请输入任务标题" />
       </el-form-item>
       <el-form-item label="修改日志" prop="changeLog">
         <el-input
@@ -42,9 +36,6 @@
 <script lang="ts" name="SystemDeptForm" setup>
 import { cloneDeep } from '@/utils'
 import { api } from '@/api/deploy/task'
-import ProjectSelect from './ProjectSelect.vue'
-import AgentSelect from './AgentSelect.vue'
-import ProjectVersionSelect from './ProjectVersionSelect.vue'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
