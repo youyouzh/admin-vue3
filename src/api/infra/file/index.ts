@@ -7,6 +7,15 @@ export interface FilePageReqVO extends PageParam {
   createdAt?: Date[]
 }
 
+export interface InfraFileVO {
+  id: number
+  path: string
+  name: string
+  url: string
+  size: number
+  createdAt: Date
+}
+
 export const getUploadPath = (): string => {
   return config.base_url + '/infra/file/upload'
 }
@@ -14,6 +23,9 @@ export const getUploadPath = (): string => {
 export const api = {
   getPage: (params: FilePageReqVO) => {
     return request.get({ url: '/infra/file/page', params })
+  },
+  getDetail: (fileId: number): InfraFileVO => {
+    return request.get({ url: `/infra/file/detail/${fileId}` })
   },
   download: (id: number) => {
     return request.download({ url: '/infra/file/download/' + id })

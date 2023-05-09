@@ -135,7 +135,7 @@ const resetQuery = () => {
 
 const formRef = ref()
 const openForm = (type: string, id?: number) => {
-  formRef.value.openDialog(type, id)
+  formRef.value.openForm(type, id)
 }
 
 /** 删除按钮操作 */

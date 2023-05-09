@@ -2,25 +2,20 @@
   <el-select
     v-model="modelValue"
     clearable
-    placeholder="请选择部署项目"
+    placeholder="请选择部署版本"
     :loading="optionLoading"
     :multiple="props.multi"
     @change="handleChangeEvent"
   >
-    <el-option
-      v-for="item in options"
-      :key="item.id"
-      :label="`${item.code}(${item.name})`"
-      :value="item.id"
-    />
+    <el-option v-for="item in options" :key="item.id" :label="item.version" :value="item.id" />
   </el-select>
 </template>
 <script setup lang="tsx">
 import { propTypes } from '@/utils/propTypes'
-import { api, ProjectVO } from '@/api/resource/project'
+import { api, ProjectVersionVO } from '@/api/resource/project-version'
 
 const props = defineProps({
-  modelValue: propTypes.number,
+  modelValue: propTypes.oneOfType([Number, Array<Number>]),
   multi: propTypes.bool.def(false)
 })
 
@@ -28,7 +23,7 @@ const modelValue = ref(props.modelValue)
 const emit = defineEmits(['update:modelValue'])
 
 const optionLoading = ref(false)
-const options = ref<ProjectVO[]>([])
+const options = ref<ProjectVersionVO[]>([])
 
 const initSelectOptions = async () => {
   try {

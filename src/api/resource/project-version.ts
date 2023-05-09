@@ -7,14 +7,20 @@ export interface ProjectVersionVO {
   referenceVersion: string
   changeLog: string
   deployFileUrl: string
+  deployFileId: number
   createdAt: Date
 }
 
 const basePath = '/resources/project-versions'
 
 export const api = {
-  getAll: async () => {
-    const data = await request.get({ url: basePath, pageNo: 1, pageSize: 500 })
+  getAll: async (projectId?: number) => {
+    const data = await request.get({
+      url: basePath,
+      pageNo: 1,
+      pageSize: 500,
+      projectId: projectId
+    })
     return data.list
   },
   getPage: async (params: PageParam) => {

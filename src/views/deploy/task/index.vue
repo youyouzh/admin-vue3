@@ -34,7 +34,6 @@
     <el-table v-loading="loading" :data="list">
       <el-table-column label="ID" align="center" prop="id" width="60" />
       <el-table-column label="项目" align="center" prop="deployProject.code" width="150" />
-      <el-table-column label="修改日志" align="center" prop="changeLog" width="200" />
       <el-table-column label="部署机器" align="center" prop="deployAgent" width="200">
         <template #default="scope">
           <el-text>{{ `${scope.row.deployAgent.name}(${scope.row.deployAgent.ip}))` }}</el-text>
@@ -68,14 +67,14 @@
       <el-table-column label="备注" align="center" prop="remark" width="150" />
       <el-table-column label="操作" align="center" fixed="right" width="200">
         <template #default="scope">
-          <el-button
+          <!-- <el-button
             link
             type="primary"
-            @click="openForm('update', scope.row.id)"
+            @click="openForm('update', scope.row)"
             v-hasPermi="['resource:project:update']"
           >
             编辑
-          </el-button>
+          </el-button> -->
           <el-button
             link
             type="primary"
@@ -84,6 +83,7 @@
           >
             重新部署
           </el-button>
+          <el-button link type="primary" @click="handleDeployLog(scope.row.id)"> 日志 </el-button>
           <el-button
             link
             type="danger"
@@ -111,8 +111,8 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { api } from '@/api/deploy/task'
 import DeployTaskForm from './DeployTaskForm.vue'
-import ProjectSelect from './ProjectSelect.vue'
-import AgentSelect from './AgentSelect.vue'
+import ProjectSelect from '@/views/resource/project/ProjectSelect.vue'
+import AgentSelect from '@/views/resource/agent/AgentSelect.vue'
 import { propTypes } from '@/utils/propTypes'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
@@ -159,8 +159,14 @@ const resetQuery = () => {
 }
 
 const formRef = ref()
-const openForm = (type: string, id?: number) => {
-  formRef.value.openDialog(type, id)
+const openForm = (type: string, row?: any) => {
+  formRef.value.openForm(type, {
+    id: row?.id,
+    projectId: row?.deployProject.id,
+    projectVersionId: row?.deployProjectVersion.id,
+    agentId: row?.deployAgent.id,
+    deployStartTime: new Date()
+  })
 }
 
 /** 删除按钮操作 */
@@ -187,16 +193,22 @@ const handleRunDeploy = async (id: number) => {
   } catch {}
 }
 
+const handleDeployLog = async (id: number) => {
+  console.log(id)
+}
+
+// 轮询刷新部署列表
+let listRefreshTimer = ref()
+
 /** 初始化 **/
 onMounted(() => {
   getList()
+  listRefreshTimer.value = setInterval(() => {
+    getList()
+  }, 1000 * 10)
 })
 
-// // 轮询刷新部署列表
-// let listRefreshTimer = setInterval(() => {
-//   getList()
-// }, 1000 * 5)
-// onBeforeUnmount(() => {
-//   listRefreshTimer && clearInterval(listRefreshTimer)
-// })
+onDeactivated(() => {
+  listRefreshTimer && clearInterval(listRefreshTimer.value)
+})
 </script>

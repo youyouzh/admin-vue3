@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="800">
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -63,7 +63,7 @@ const formRules = reactive({
 })
 
 /** 打开弹窗 */
-const openDialog = async (type: string, id?: number) => {
+const openForm = async (type: string, id?: number) => {
   dialogVisible.value = true
   dialogTitle.value = t('action.' + type)
   formType.value = type
@@ -79,7 +79,7 @@ const openDialog = async (type: string, id?: number) => {
   }
 }
 
-defineExpose({ openDialog }) // 提供 open 方法，用于打开弹窗
+defineExpose({ openForm }) // 提供 open 方法，用于打开弹窗
 
 /** 提交表单 */
 const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调

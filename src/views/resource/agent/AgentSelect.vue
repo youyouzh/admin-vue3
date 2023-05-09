@@ -2,6 +2,7 @@
   <el-select
     v-model="modelValue"
     clearable
+    filterable
     placeholder="请选择部署机器"
     :loading="optionLoading"
     :multiple="props.multi"
@@ -20,7 +21,7 @@ import { propTypes } from '@/utils/propTypes'
 import { api, AgentVO } from '@/api/resource/agent'
 
 const props = defineProps({
-  modelValue: propTypes.number,
+  modelValue: propTypes.oneOfType([Number, Array<Number>]),
   multi: propTypes.bool.def(true)
 })
 

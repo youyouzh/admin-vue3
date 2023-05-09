@@ -22,7 +22,7 @@
         <el-button
           type="primary"
           plain
-          @click="openDialog('create')"
+          @click="openForm('create')"
           v-hasPermi="['resource:project:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
@@ -59,7 +59,7 @@
           <el-button
             link
             type="primary"
-            @click="openDialog('update', scope.row.id)"
+            @click="openForm('update', scope.row.id)"
             v-hasPermi="['resource:project:update']"
           >
             编辑
@@ -203,7 +203,7 @@ const formRules = reactive({
 })
 
 /** 打开弹窗 */
-const openDialog = async (type: string, id?: number) => {
+const openForm = async (type: string, id?: number) => {
   dialogVisible.value = true
   dialogTitle.value = t('action.' + type)
   formType.value = type

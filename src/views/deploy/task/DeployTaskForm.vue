@@ -16,14 +16,6 @@
       <el-form-item label="部署版本" prop="projectVersionId">
         <ProjectVersionSelect v-model="formData.projectVersionId" />
       </el-form-item>
-      <el-form-item label="修改日志" prop="changeLog">
-        <el-input
-          v-model="formData.changeLog"
-          type="textarea"
-          placeholder="请输入修改日志"
-          :autosize="{ minRows: 5 }"
-        />
-      </el-form-item>
       <el-form-item label="部署时间" prop="deployStartTime">
         <el-date-picker
           v-model="formData.deployStartTime"
@@ -41,10 +33,11 @@
 </template>
 <script lang="ts" name="SystemDeptForm" setup>
 import { cloneDeep } from '@/utils'
-import { api } from '@/api/deploy/task'
-import ProjectSelect from './ProjectSelect.vue'
-import AgentSelect from './AgentSelect.vue'
-import ProjectVersionSelect from './ProjectVersionSelect.vue'
+import { api, DeployTaskVO } from '@/api/deploy/task'
+import ProjectSelect from '@/views/resource/project/ProjectSelect.vue'
+import AgentSelect from '@/views/resource/agent/AgentSelect.vue'
+import ProjectVersionSelect from '@/views/resource/project/ProjectVersionSelect.vue'
+import { propTypes } from '@/utils/propTypes'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -54,14 +47,19 @@ const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
 
-const defaultFormData = {
+const props = defineProps({
+  projectId: propTypes.oneOfType([Number, Array<Number>]),
+  projectVersionId: propTypes.oneOfType([Number, Array<Number>]),
+  agentId: propTypes.oneOfType([Number, Array<Number>])
+})
+
+const defaultFormData: DeployTaskVO = {
   id: undefined,
-  projectId: undefined,
-  projectVersionId: undefined,
-  agentId: undefined,
-  changeLog: undefined,
+  projectId: ref(props.projectId),
+  projectVersionId: ref(props.projectVersionId),
+  agentId: ref(props.agentId),
   deployStartTime: new Date()
-}
+} as unknown as DeployTaskVO
 const formRef = ref()
 const formData = ref(cloneDeep(defaultFormData))
 const formRules = reactive({
@@ -72,23 +70,16 @@ const formRules = reactive({
 })
 
 /** 打开弹窗 */
-const openDialog = async (type: string, id?: number) => {
+const openForm = async (type: string, row?: DeployTaskVO) => {
   dialogVisible.value = true
   dialogTitle.value = t('action.' + type)
   formType.value = type
   resetForm()
   // 修改时，设置数据
-  if (id) {
-    formLoading.value = true
-    try {
-      formData.value = await api.getDetail(id)
-    } finally {
-      formLoading.value = false
-    }
-  }
+  if (row) formData.value = row
 }
 
-defineExpose({ openDialog }) // 提供 open 方法，用于打开弹窗
+defineExpose({ openForm }) // 提供 open 方法，用于打开弹窗
 
 /** 提交表单 */
 const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调

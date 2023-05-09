@@ -29,7 +29,7 @@
   </el-form>
 </template>
 <script setup lang="tsx">
-import { api, FormReqVO } from '@/api/resource/project'
+import { api, ProjectVO } from '@/api/resource/project'
 import { propTypes } from '@/utils/propTypes'
 
 const { t } = useI18n()
@@ -57,7 +57,7 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as unknown as FormReqVO
+    const data = formData.value as unknown as ProjectVO
     await api.update(data)
     message.success(t('common.updateSuccess'))
   } finally {

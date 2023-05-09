@@ -1,5 +1,15 @@
 import request from '@/config/axios'
 
+export interface DeployTaskVO {
+  id?: number
+  projectId: number
+  projectVersionId: number
+  agentId: number
+  deployStartTime: Date
+  deployEndTime: Date
+  createdAt: Date
+}
+
 const basePath = '/deploy/tasks'
 
 export const api = {
