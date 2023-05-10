@@ -118,8 +118,7 @@ const handleDownload = async () => {
 }
 
 /** 初始化文件信息 */
-const initFileInfo = async (fileId?: number) => {
-  console.log('initFileInfo', fileId)
+const initFileInfo = async (fileId?: number, clear?: boolean) => {
   if (fileId) {
     try {
       uploadDisabled.value = true
@@ -128,6 +127,10 @@ const initFileInfo = async (fileId?: number) => {
     } finally {
       uploadDisabled.value = false
     }
+  }
+  if (clear) {
+    // 清空文件列表，处理先编辑后新增
+    fileList.value = []
   }
 }
 

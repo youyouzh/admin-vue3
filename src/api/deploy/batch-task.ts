@@ -1,5 +1,15 @@
 import request from '@/config/axios'
 
+export interface BatchDeployTaskVO {
+  id?: number
+  title: string
+  changeLog: String
+  deployTaskIds: number[]
+  deployStartTime: Date
+  deployEndTime: Date
+  createdAt: Date
+}
+
 const basePath = '/deploy/batch-tasks'
 
 export const api = {

@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle" width="500">
+  <Dialog v-model="dialogVisible" :title="dialogTitle + '部署包版本'" width="500">
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -110,6 +110,7 @@ const submitForm = async () => {
 /** 重置表单 */
 const resetForm = () => {
   formData.value = cloneDeep(defaultFormData)
+  uploadFileRef.value.initFileInfo(null, true)
   formRef.value?.resetFields()
 }
 </script>

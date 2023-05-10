@@ -7,7 +7,7 @@
     label-width="80px"
   >
     <el-form-item label="文件名" prop="configFilename">
-      <el-input v-model="formData.code" placeholder="请输入配置文件名" />
+      <el-input v-model="formData.configFilename" placeholder="请输入配置文件名" />
     </el-form-item>
     <el-form-item label="文件类型" prop="configFileType">
       <el-radio-group v-model="formData.configFileType">

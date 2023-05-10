@@ -51,6 +51,10 @@ const props = defineProps({
 const formLoading = ref(false)
 const formRef = ref()
 const formData = ref(props.projectDetail)
+/** 设置默认值 */
+formData.value.deployRootPath = '/cjhx/appsoft/'
+formData.value.logRootPath = '/cjhx/appsoft/'
+
 const formRules = reactive({
   deployRootPath: [{ required: true, message: '部署根目录不能为空', trigger: 'blur' }],
   logRootPath: [{ required: true, message: '日志根目录不能为空', trigger: 'blur' }]

@@ -22,6 +22,22 @@
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
+        <el-button
+          type="success"
+          plain
+          @click="openImportForm"
+          v-hasPermi="['resource:project:create']"
+        >
+          <Icon icon="ep:upload" class="mr-5px" /> 导入
+        </el-button>
+        <el-button
+          type="success"
+          plain
+          @click="openImportForm"
+          v-hasPermi="['resource:project:create']"
+        >
+          <Icon icon="ep:upload" class="mr-5px" /> 上传
+        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -64,9 +80,9 @@
           </el-button>
           <el-button
             link
-            type="primary"
+            type="info"
             v-hasPermi="['resource:project:update']"
-            @click="handleRunDeploy(scope.row.id)"
+            @click="handleDeployDetail(scope.row.id)"
           >
             部署详情
           </el-button>
@@ -92,11 +108,19 @@
 
   <!-- 表单弹窗：添加/修改 -->
   <BatchDeployTaskForm ref="formRef" @success="getList" />
+
+  <Dialog v-model="taskDetailDialogVisible" title="部署任务详情">
+    <DeployTaskIndex width="800" :batch-task-id="detailBatchTaskId" />
+  </Dialog>
+
+  <BatchDeployTaskImportForm ref="importFormRef" @success="getList" />
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
 import { api } from '@/api/deploy/batch-task'
 import BatchDeployTaskForm from './BatchDeployTaskForm.vue'
+import BatchDeployTaskImportForm from './BatchDeployTaskImportForm.vue'
+import DeployTaskIndex from '../task/index.vue'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
@@ -133,9 +157,17 @@ const resetQuery = () => {
   handleQuery()
 }
 
+/** 新增修改表单 */
 const formRef = ref()
 const openForm = (type: string, id?: number) => {
   formRef.value.openForm(type, id)
+}
+
+/** 导入表单 */
+const importFormRef = ref()
+const openImportForm = () => {
+  importFormRef.value.openForm()
+  console.log(importFormRef.value)
 }
 
 /** 删除按钮操作 */
@@ -151,6 +183,7 @@ const handleDelete = async (id: number) => {
   } catch {}
 }
 
+/** 立即部署 */
 const handleRunDeploy = async (id: number) => {
   try {
     await message.confirm('确认立即重新部署吗？')
@@ -158,6 +191,14 @@ const handleRunDeploy = async (id: number) => {
     message.success(t('common.delSuccess'))
     await getList()
   } catch {}
+}
+
+/** 部署任务详情 */
+const taskDetailDialogVisible = ref(false)
+const detailBatchTaskId = ref(0)
+const handleDeployDetail = async (batchTaskId: number) => {
+  taskDetailDialogVisible.value = true
+  detailBatchTaskId.value = batchTaskId
 }
 
 /** 初始化 **/

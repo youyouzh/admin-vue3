@@ -5,6 +5,8 @@ export interface DeployTaskVO {
   projectId: number
   projectVersionId: number
   agentId: number
+  progress: number
+  remark: string
   deployStartTime: Date
   deployEndTime: Date
   createdAt: Date

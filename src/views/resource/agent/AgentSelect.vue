@@ -16,7 +16,7 @@
     />
   </el-select>
 </template>
-<script setup lang="tsx">
+<script setup lang="tsx" name="AgentSelect">
 import { propTypes } from '@/utils/propTypes'
 import { api, AgentVO } from '@/api/resource/agent'
 

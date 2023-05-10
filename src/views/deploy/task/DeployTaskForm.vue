@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle">
+  <Dialog v-model="dialogVisible" :title="dialogTitle + '部署任务'">
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -31,7 +31,7 @@
     </template>
   </Dialog>
 </template>
-<script lang="ts" name="SystemDeptForm" setup>
+<script lang="ts" name="DeployTaskForm" setup>
 import { cloneDeep } from '@/utils'
 import { api, DeployTaskVO } from '@/api/deploy/task'
 import ProjectSelect from '@/views/resource/project/ProjectSelect.vue'

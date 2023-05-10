@@ -115,7 +115,7 @@
 </template>
 <script lang="ts" name="CopperModal" setup>
 import { useDesign } from '@/hooks/web/useDesign'
-import { dataURLtoBlob } from '@/utils/filt'
+import { dataURLtoBlob } from '@/utils/download'
 import { useI18n } from 'vue-i18n'
 import type { CropendResult, Cropper } from './types'
 import { propTypes } from '@/utils/propTypes'
