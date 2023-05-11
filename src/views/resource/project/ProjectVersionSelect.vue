@@ -16,6 +16,7 @@ import { api, ProjectVersionVO } from '@/api/resource/project-version'
 
 const props = defineProps({
   modelValue: propTypes.oneOfType([Number, Array<Number>]),
+  projectId: propTypes.number,
   multi: propTypes.bool.def(false)
 })
 
@@ -28,11 +29,21 @@ const options = ref<ProjectVersionVO[]>([])
 const initSelectOptions = async () => {
   try {
     optionLoading.value = true
-    options.value = await api.getAll()
+    options.value = await api.getAll(props.projectId)
   } finally {
     optionLoading.value = false
   }
 }
+
+/** projectId变化则更新选项，重置值 */
+watch(
+  () => props.projectId,
+  () => {
+    initSelectOptions()
+    modelValue.value = undefined
+    emit('update:modelValue', modelValue)
+  }
+)
 
 const handleChangeEvent = () => {
   emit('update:modelValue', modelValue)

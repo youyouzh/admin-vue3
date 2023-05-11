@@ -15,12 +15,12 @@ const basePath = '/resources/project-versions'
 
 export const api = {
   getAll: async (projectId?: number) => {
-    const data = await request.get({
-      url: basePath,
+    const params = {
       pageNo: 1,
       pageSize: 500,
       projectId: projectId
-    })
+    }
+    const data = await request.get({ url: basePath, params })
     return data.list
   },
   getPage: async (params: PageParam) => {

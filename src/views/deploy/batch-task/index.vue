@@ -8,7 +8,7 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="关键词" prop="name">
+      <el-form-item label="关键词" prop="keyword">
         <el-input v-model="queryParams.keyword" placeholder="请输入关键词" clearable />
       </el-form-item>
       <el-form-item>
@@ -25,15 +25,7 @@
         <el-button
           type="success"
           plain
-          @click="openImportForm"
-          v-hasPermi="['resource:project:create']"
-        >
-          <Icon icon="ep:upload" class="mr-5px" /> 导入
-        </el-button>
-        <el-button
-          type="success"
-          plain
-          @click="openImportForm"
+          @click="openForm('create')"
           v-hasPermi="['resource:project:create']"
         >
           <Icon icon="ep:upload" class="mr-5px" /> 上传
@@ -68,7 +60,7 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" width="150" />
-      <el-table-column label="操作" align="center" fixed="right" width="200">
+      <el-table-column label="操作" align="center" fixed="right" width="240">
         <template #default="scope">
           <el-button
             link
@@ -80,7 +72,7 @@
           </el-button>
           <el-button
             link
-            type="info"
+            type="primary"
             v-hasPermi="['resource:project:update']"
             @click="handleDeployDetail(scope.row.id)"
           >
@@ -109,17 +101,14 @@
   <!-- 表单弹窗：添加/修改 -->
   <BatchDeployTaskForm ref="formRef" @success="getList" />
 
-  <Dialog v-model="taskDetailDialogVisible" title="部署任务详情">
-    <DeployTaskIndex width="800" :batch-task-id="detailBatchTaskId" />
+  <Dialog v-model="taskDetailDialogVisible" title="部署任务详情" width="1000">
+    <DeployTaskIndex :batch-task-id="detailBatchTaskId" />
   </Dialog>
-
-  <BatchDeployTaskImportForm ref="importFormRef" @success="getList" />
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
 import { api } from '@/api/deploy/batch-task'
 import BatchDeployTaskForm from './BatchDeployTaskForm.vue'
-import BatchDeployTaskImportForm from './BatchDeployTaskImportForm.vue'
 import DeployTaskIndex from '../task/index.vue'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
@@ -163,13 +152,6 @@ const openForm = (type: string, id?: number) => {
   formRef.value.openForm(type, id)
 }
 
-/** 导入表单 */
-const importFormRef = ref()
-const openImportForm = () => {
-  importFormRef.value.openForm()
-  console.log(importFormRef.value)
-}
-
 /** 删除按钮操作 */
 const handleDelete = async (id: number) => {
   try {
@@ -201,16 +183,19 @@ const handleDeployDetail = async (batchTaskId: number) => {
   detailBatchTaskId.value = batchTaskId
 }
 
+// 轮询刷新部署列表
+let listRefreshTimer = ref()
+
 /** 初始化 **/
 onMounted(() => {
   getList()
+  listRefreshTimer.value = setInterval(() => {
+    getList()
+  }, 1000 * 10)
+  clearInterval(listRefreshTimer.value)
 })
 
-// // 轮询刷新部署列表
-// let listRefreshTimer = setInterval(() => {
-//   getList()
-// }, 1000 * 5)
-// onBeforeUnmount(() => {
-//   listRefreshTimer && clearInterval(listRefreshTimer)
-// })
+onDeactivated(() => {
+  listRefreshTimer && clearInterval(listRefreshTimer.value)
+})
 </script>

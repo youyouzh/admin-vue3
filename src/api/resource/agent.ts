@@ -1,19 +1,31 @@
 import request from '@/config/axios'
 
 export interface AgentVO {
-  id?: number
+  id: number
   name: string
   ip: string
   remark: string
+  recommendSelect: boolean
   createdAt: Date
 }
 
 const basePath = '/resources/agents'
 
 export const api = {
-  getAll: async () => {
-    const data = await request.get({ url: basePath, pageNo: 1, pageSize: 500 })
+  getAll: async (projectId?: number) => {
+    const params = {
+      pageNo: 1,
+      pageSize: 500,
+      projectId: projectId
+    }
+    const data = await request.get({ url: basePath, params })
     return data.list
+  },
+  getOptions: async (projectId?: number) => {
+    const params = {
+      projectId: projectId
+    }
+    return await request.get({ url: `${basePath}/options`, params })
   },
   getPage: async (params: PageParam) => {
     return await request.get({ url: basePath, params })

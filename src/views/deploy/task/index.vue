@@ -206,6 +206,7 @@ onMounted(() => {
   listRefreshTimer.value = setInterval(() => {
     getList()
   }, 1000 * 10)
+  clearInterval(listRefreshTimer.value)
 })
 
 onDeactivated(() => {

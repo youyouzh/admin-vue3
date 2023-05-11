@@ -52,7 +52,7 @@ export const getAsyncRoutes = () => {
           path: 'app',
           component: 'resource/app/index',
           componentName: null,
-          icon: 'ep:grid',
+          icon: 'ep:goods',
           children: null
         },
         {
@@ -60,7 +60,7 @@ export const getAsyncRoutes = () => {
           path: 'agent',
           component: 'resource/agent/index',
           componentName: null,
-          icon: 'ep:grid',
+          icon: 'ep:coin',
           children: null
         },
         {
@@ -68,15 +68,15 @@ export const getAsyncRoutes = () => {
           path: 'project',
           component: 'resource/project/index',
           componentName: null,
-          icon: 'ep:grid',
+          icon: 'ep:refrigerator',
           children: null
         },
         {
-          name: '服务详情',
+          name: '编辑服务详情',
           path: 'project-detail/:id',
           component: 'resource/project/detail',
           componentName: null,
-          icon: 'ep:grid',
+          icon: 'ep:edit',
           visible: false,
           keepAlive: true,
           alwaysShow: false,
@@ -104,6 +104,17 @@ export const getAsyncRoutes = () => {
           component: 'deploy/batch-task/index',
           componentName: null,
           icon: 'ep:data-analysis',
+          children: null
+        },
+        {
+          name: '新建批量部署任务',
+          path: 'create-batch-task',
+          component: 'deploy/batch-task/create',
+          componentName: null,
+          icon: 'ep:edit',
+          visible: false,
+          keepAlive: true,
+          alwaysShow: false,
           children: null
         }
       ]

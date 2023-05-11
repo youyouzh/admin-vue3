@@ -27,17 +27,46 @@
         />
       </el-form-item>
       <el-form-item label="部署服务" prop="deployTasks">
-        <el-row v-for="(deployTask, index) in formData.deployTasks" :key="index" class="mb-8">
-          <ProjectSelect v-model="deployTask.projectId" />
-          <AgentSelect v-model="deployTask.agentId" />
-          <ProjectVersionSelect v-model="deployTask.projectVersionId" />
-          <el-button type="primary" link @click="handleRemoveDeployTask(index)">
-            <Icon icon="ep:close" />
-          </el-button>
-        </el-row>
         <el-button type="primary" @click="handleAddDeployTask"
-          ><Icon icon="ep:plus" />增加</el-button
+          ><Icon icon="ep:plus" />添加部署服务</el-button
         >
+        <el-table :data="formData.deployTasks">
+          <el-table-column label="项目" align="center" prop="projectId">
+            <template #default="scope">
+              <ProjectSelect v-model="scope.row.projectId" />
+            </template>
+          </el-table-column>
+          <el-table-column label="部署机器" align="center" prop="agentIds">
+            <template #default="scope">
+              <AgentSelect
+                v-if="scope.row.projectId"
+                v-model="scope.row.agentIds"
+                :project-id="scope.row.projectId"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="部署版本" align="center" prop="projectVersionId">
+            <template #default="scope">
+              <ProjectVersionSelect
+                v-if="scope.row.projectId"
+                v-model="scope.row.projectVersionId"
+                :project-id="scope.row.projectId"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" fixed="right" width="80">
+            <template #default="scope">
+              <el-button
+                link
+                type="danger"
+                @click="handleRemoveDeployTask(scope.row)"
+                v-hasPermi="['resource:project:delete']"
+              >
+                <Icon icon="ep:close" />
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -105,6 +134,23 @@ const submitForm = async () => {
   if (!formRef) return
   const valid = await formRef.value.validate()
   if (!valid) return
+  for (const index in formData.value.deployTasks) {
+    const deployTask = formData.value.deployTasks[index]
+    const indexOne = parseInt(index) + 1
+    if (!deployTask.projectId) {
+      message.warning(`请检查部署配置，【第${indexOne}项部署项目】不能为空`)
+      return
+    }
+    if (!deployTask.agentIds || !deployTask.agentIds.length || deployTask.agentIds.length == 0) {
+      message.warning(`请检查部署配置，【第${indexOne}项部署机器】不能为空`)
+      return
+    }
+    if (!deployTask.projectVersionId) {
+      message.warning(`请检查部署配置，【第${indexOne}项部署版本】不能为空`)
+      return
+    }
+  }
+
   // 提交请求
   formLoading.value = true
   try {
@@ -135,7 +181,10 @@ const handleAddDeployTask = () => {
 }
 
 /** 移除部署服务 */
-const handleRemoveDeployTask = (index: number) => {
-  formData.value.deployTasks.splice(index, 1)
+const handleRemoveDeployTask = (row: any) => {
+  const index = formData.value.deployTasks.indexOf(row)
+  if (index >= 0) {
+    formData.value.deployTasks.splice(index, 1)
+  }
 }
 </script>

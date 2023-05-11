@@ -22,6 +22,7 @@ import { api, AgentVO } from '@/api/resource/agent'
 
 const props = defineProps({
   modelValue: propTypes.oneOfType([Number, Array<Number>]),
+  projectId: propTypes.number,
   multi: propTypes.bool.def(true)
 })
 
@@ -34,7 +35,8 @@ const options = ref<AgentVO[]>([])
 const initSelectOptions = async () => {
   try {
     optionLoading.value = true
-    options.value = await api.getAll()
+    options.value = await api.getOptions(props.projectId)
+    modelValue.value = options.value.filter((v) => v.recommendSelect).map((v) => v.id)
   } finally {
     optionLoading.value = false
   }
@@ -43,6 +45,16 @@ const initSelectOptions = async () => {
 const handleChangeEvent = () => {
   emit('update:modelValue', modelValue)
 }
+
+/** projectId变化则更新选项，重置值 */
+watch(
+  () => props.projectId,
+  () => {
+    modelValue.value = undefined
+    initSelectOptions()
+    emit('update:modelValue', modelValue)
+  }
+)
 
 onMounted(() => {
   initSelectOptions()
