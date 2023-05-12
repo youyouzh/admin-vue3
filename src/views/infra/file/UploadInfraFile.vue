@@ -18,10 +18,20 @@
     <template #trigger>
       <el-button type="primary" class="ml-3"><Icon icon="ep:select" />选择文件</el-button>
     </template>
-    <el-button type="primary" class="ml-3" v-if="fileList.length >= 1" @click="submitUpload"
+    <el-button
+      type="success"
+      class="ml-3"
+      v-if="fileList.length >= 1"
+      @click="submitUpload"
+      style="vertical-align: top"
       ><Icon icon="ep:upload-filled" />上传</el-button
     >
-    <el-button type="success" class="ml-3" v-if="fileId" @click="handleDownload"
+    <el-button
+      type="info"
+      class="ml-3"
+      v-if="fileId"
+      @click="handleDownload"
+      style="vertical-align: top"
       ><Icon icon="ep:download" />下载</el-button
     >
     <template #tip>
@@ -118,11 +128,11 @@ const handleDownload = async () => {
 }
 
 /** 初始化文件信息 */
-const initFileInfo = async (fileId?: number, clear?: boolean) => {
-  if (fileId) {
+const initFileInfo = async (fileIdParam?: number, clear?: boolean) => {
+  if (fileIdParam) {
     try {
       uploadDisabled.value = true
-      const data = await api.getDetail(fileId)
+      const data = await api.getDetail(fileIdParam)
       fileList.value = [data as unknown as UploadUserFile]
     } finally {
       uploadDisabled.value = false
@@ -131,6 +141,7 @@ const initFileInfo = async (fileId?: number, clear?: boolean) => {
   if (clear) {
     // 清空文件列表，处理先编辑后新增
     fileList.value = []
+    fileId.value = undefined
   }
 }
 

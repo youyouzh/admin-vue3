@@ -2,9 +2,11 @@ import request from '@/config/axios'
 
 export interface DeployTaskVO {
   id?: number
+  batchTaskId: number
   projectId: number
   projectVersionId: number
   agentId: number
+  agentIds: number[]
   progress: number
   remark: string
   deployStartTime: Date

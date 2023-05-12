@@ -10,8 +10,8 @@
       <el-form-item label="部署项目" prop="projectId">
         <ProjectSelect v-model="formData.projectId" />
       </el-form-item>
-      <el-form-item label="部署机器" prop="agentId">
-        <AgentSelect v-model="formData.agentId" :multi="false" />
+      <el-form-item label="部署机器" prop="agentIds">
+        <AgentSelect v-model="formData.agentIds" />
       </el-form-item>
       <el-form-item label="部署版本" prop="projectVersionId" v-if="formData.projectId">
         <ProjectVersionSelect
@@ -41,6 +41,7 @@ import ProjectSelect from '@/views/resource/project/ProjectSelect.vue'
 import AgentSelect from '@/views/resource/agent/AgentSelect.vue'
 import ProjectVersionSelect from '@/views/resource/project/ProjectVersionSelect.vue'
 import { propTypes } from '@/utils/propTypes'
+import { number } from 'vue-types'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -51,16 +52,16 @@ const formLoading = ref(false) // 表单的加载中：1）修改时的数据加
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
 
 const props = defineProps({
-  projectId: propTypes.oneOfType([Number, Array<Number>]),
-  projectVersionId: propTypes.oneOfType([Number, Array<Number>]),
-  agentId: propTypes.oneOfType([Number, Array<Number>])
+  projectId: propTypes.number,
+  projectVersionId: propTypes.number,
+  agentIds: propTypes.arrayOf(number)
 })
 
 const defaultFormData: DeployTaskVO = {
   id: undefined,
   projectId: ref(props.projectId),
   projectVersionId: ref(props.projectVersionId),
-  agentId: ref(props.agentId),
+  agentIds: ref(props.agentIds),
   deployStartTime: new Date()
 } as unknown as DeployTaskVO
 const formRef = ref()
@@ -68,7 +69,7 @@ const formData = ref(cloneDeep(defaultFormData))
 const formRules = reactive({
   projectId: [{ required: true, message: '部署项目不能为空', trigger: 'blur' }],
   projectVersionId: [{ required: true, message: '部署版本不能为空', trigger: 'blur' }],
-  agentId: [{ required: true, message: '部署机器不能为空', trigger: 'blur' }],
+  agentIds: [{ required: true, message: '部署机器不能为空', trigger: 'blur' }],
   deployStartTime: [{ required: true, message: '部署时间不能为空', trigger: 'blur' }]
 })
 

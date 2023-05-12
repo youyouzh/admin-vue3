@@ -84,12 +84,13 @@
   <!-- 表单弹窗：添加/修改 -->
   <ProjectVersionForm ref="formRef" @success="getList" :project-id="props.projectDetail.id" />
 
-  <DeployTaskForm ref="runDeployFormRef" @success="getList" />
+  <DeployTaskForm ref="runDeployFormRef" @success="getList" :multi-agent="true" />
 </template>
 <script setup lang="tsx">
 import { dateFormatter } from '@/utils/formatTime'
 import { api, ProjectVersionVO } from '@/api/resource/project-version'
 import { propTypes } from '@/utils/propTypes'
+import { toRaw } from 'vue'
 import ProjectVersionForm from './ProjectVersionForm.vue'
 import DeployTaskForm from '@/views/deploy/task/DeployTaskForm.vue'
 
@@ -152,7 +153,7 @@ const handleRunDeploy = (row: ProjectVersionVO) => {
   runDeployFormRef.value.openForm('create', {
     projectId: row.projectId,
     projectVersionId: row.id,
-    agentId: props.projectDetail.deployAgentIds,
+    agentIds: toRaw(props.projectDetail.deployAgentIds),
     deployStartTime: new Date()
   })
 }

@@ -22,14 +22,11 @@
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
-        <el-button
-          type="success"
-          plain
-          @click="openForm('create')"
-          v-hasPermi="['resource:project:create']"
-        >
-          <Icon icon="ep:upload" class="mr-5px" /> 上传
-        </el-button>
+        <router-link to="/deploy/batch-task/create" class="ml-3">
+          <el-button type="success" plain v-hasPermi="['resource:project:create']">
+            <Icon icon="ep:upload" class="mr-5px" /> 上传
+          </el-button>
+        </router-link>
       </el-form-item>
     </el-form>
   </ContentWrap>

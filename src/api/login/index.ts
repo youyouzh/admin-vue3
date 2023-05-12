@@ -108,10 +108,10 @@ export const getAsyncRoutes = () => {
         },
         {
           name: '新建批量部署任务',
-          path: 'create-batch-task',
+          path: 'batch-task/create',
           component: 'deploy/batch-task/create',
           componentName: null,
-          icon: 'ep:edit',
+          icon: 'ep:plus',
           visible: false,
           keepAlive: true,
           alwaysShow: false,

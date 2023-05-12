@@ -5,7 +5,7 @@
     filterable
     placeholder="请选择部署机器"
     :loading="optionLoading"
-    :multiple="props.multi"
+    :multiple="multi"
     @change="handleChangeEvent"
   >
     <el-option
@@ -36,7 +36,9 @@ const initSelectOptions = async () => {
   try {
     optionLoading.value = true
     options.value = await api.getOptions(props.projectId)
-    modelValue.value = options.value.filter((v) => v.recommendSelect).map((v) => v.id)
+    if (props.projectId) {
+      modelValue.value = options.value.filter((v) => v.recommendSelect).map((v) => v.id)
+    }
   } finally {
     optionLoading.value = false
   }
@@ -50,7 +52,6 @@ const handleChangeEvent = () => {
 watch(
   () => props.projectId,
   () => {
-    modelValue.value = undefined
     initSelectOptions()
     emit('update:modelValue', modelValue)
   }

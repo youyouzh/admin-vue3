@@ -1,81 +1,83 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle + '批量部署任务'" width="800">
-    <el-form
-      ref="formRef"
-      v-loading="formLoading"
-      :model="formData"
-      :rules="formRules"
-      label-width="80px"
-    >
-      <el-form-item label="任务标题" prop="title">
-        <el-input v-model="formData.title" placeholder="请输入任务标题" />
-      </el-form-item>
-      <el-form-item label="修改日志" prop="changeLog">
-        <el-input
-          v-model="formData.changeLog"
-          type="textarea"
-          placeholder="请输入修改日志"
-          :autosize="{ minRows: 2 }"
-        />
-      </el-form-item>
-      <el-form-item label="部署时间" prop="deployStartTime">
-        <el-date-picker
-          v-model="formData.deployStartTime"
-          placeholder="请输入部署时间"
-          type="datetime"
-          :default-time="new Date()"
-        />
-      </el-form-item>
-      <el-form-item label="部署服务" prop="deployTasks">
-        <el-button type="primary" @click="handleAddDeployTask"
-          ><Icon icon="ep:plus" />添加部署服务</el-button
-        >
-        <el-table :data="formData.deployTasks">
-          <el-table-column label="项目" align="center" prop="projectId">
-            <template #default="scope">
-              <ProjectSelect v-model="scope.row.projectId" />
-            </template>
-          </el-table-column>
-          <el-table-column label="部署机器" align="center" prop="agentIds">
-            <template #default="scope">
-              <AgentSelect v-if="scope.row.projectId" v-model="scope.row.agentIds" />
-            </template>
-          </el-table-column>
-          <el-table-column label="部署版本" align="center" prop="projectVersionId">
-            <template #default="scope">
-              <ProjectVersionSelect
-                v-if="scope.row.projectId"
-                v-model="scope.row.projectVersionId"
-                :project-id="scope.row.projectId"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" fixed="right" width="80">
-            <template #default="scope">
-              <el-button
-                link
-                type="danger"
-                @click="handleRemoveDeployTask(scope.row)"
-                v-hasPermi="['resource:project:delete']"
-              >
-                <Icon icon="ep:close" />
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-form-item>
-    </el-form>
-    <template #footer>
+  <el-form
+    ref="formRef"
+    v-loading="formLoading"
+    :model="formData"
+    :rules="formRules"
+    label-width="120px"
+  >
+    <el-form-item label="任务标题" prop="title">
+      <el-input v-model="formData.title" placeholder="请输入任务标题" />
+    </el-form-item>
+    <el-form-item label="修改日志" prop="changeLog">
+      <el-input
+        v-model="formData.changeLog"
+        type="textarea"
+        placeholder="请输入修改日志"
+        :autosize="{ minRows: 2 }"
+      />
+    </el-form-item>
+    <el-form-item label="部署时间" prop="deployStartTime">
+      <el-date-picker
+        v-model="formData.deployStartTime"
+        placeholder="请输入部署时间"
+        type="datetime"
+        :default-time="new Date()"
+      />
+    </el-form-item>
+    <el-form-item label="批量部署包" prop="">
+      <UploadInfraFile v-model="formData.zipFileId" />
+    </el-form-item>
+    <el-form-item label="部署服务" prop="deployTasks">
+      <el-button type="primary" @click="handleAddDeployTask"
+        ><Icon icon="ep:plus" />添加部署服务</el-button
+      >
+      <el-table :data="formData.deployTasks">
+        <el-table-column label="项目" align="center" prop="projectId">
+          <template #default="scope">
+            <ProjectSelect v-model="scope.row.projectId" />
+          </template>
+        </el-table-column>
+        <el-table-column label="部署机器" align="center" prop="agentIds">
+          <template #default="scope">
+            <AgentSelect v-if="scope.row.projectId" v-model="scope.row.agentIds" />
+          </template>
+        </el-table-column>
+        <el-table-column label="部署版本" align="center" prop="projectVersionId">
+          <template #default="scope">
+            <ProjectVersionSelect
+              v-if="scope.row.projectId"
+              v-model="scope.row.projectVersionId"
+              :project-id="scope.row.projectId"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" fixed="right" width="80">
+          <template #default="scope">
+            <el-button
+              link
+              type="danger"
+              @click="handleRemoveDeployTask(scope.row)"
+              v-hasPermi="['resource:project:delete']"
+            >
+              <Icon icon="ep:close" />
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-form-item>
+    <el-form-item>
       <el-button type="primary" @click="submitForm">确 定</el-button>
-      <el-button @click="dialogVisible = false">取 消</el-button>
-    </template>
-  </Dialog>
+      <el-button>返 回</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 <script lang="ts" name="BatchDeployTaskForm" setup>
 import { cloneDeep } from '@/utils'
 import { api } from '@/api/deploy/batch-task'
 import ProjectSelect from '@/views/resource/project/ProjectSelect.vue'
 import AgentSelect from '@/views/resource/agent/AgentSelect.vue'
+import UploadInfraFile from '@/views/infra/file/UploadInfraFile.vue'
 import ProjectVersionSelect from '@/views/resource/project/ProjectVersionSelect.vue'
 
 const { t } = useI18n() // 国际化
