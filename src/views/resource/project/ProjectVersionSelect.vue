@@ -7,7 +7,12 @@
     :multiple="props.multi"
     @change="handleChangeEvent"
   >
-    <el-option v-for="item in options" :key="item.id" :label="item.version" :value="item.id" />
+    <el-option
+      v-for="item in options"
+      :key="item.id"
+      :label="item.version"
+      :value="item[valueField]"
+    />
   </el-select>
 </template>
 <script setup lang="tsx">
@@ -17,7 +22,8 @@ import { api, ProjectVersionVO } from '@/api/resource/project-version'
 const props = defineProps({
   modelValue: propTypes.oneOfType([Number, Array<Number>]),
   projectId: propTypes.number,
-  multi: propTypes.bool.def(false)
+  multi: propTypes.bool.def(false),
+  valueField: propTypes.string.def('id')
 })
 
 const modelValue = ref(props.modelValue)

@@ -51,7 +51,7 @@ import type { UploadInstance, UploadUserFile, UploadProps, UploadRawFile } from 
 
 const message = useMessage() // 消息弹窗
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'uploadFinished'])
 const props = defineProps({
   modelValue: propTypes.number,
   overload: propTypes.bool.def(true),
@@ -88,6 +88,7 @@ const handleFileSuccess: UploadProps['onSuccess'] = (res: any): void => {
   fileId.value = res.data.id
   fileList.value = [res.data as unknown as UploadUserFile]
   emit('update:modelValue', res.data.id)
+  emit('uploadFinished', res.data)
 }
 
 // 处理文件替换

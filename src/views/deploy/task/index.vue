@@ -19,6 +19,7 @@
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
         <el-button
           type="primary"
+          v-if="!batchTaskId"
           plain
           @click="openForm('create')"
           v-hasPermi="['resource:project:create']"
@@ -86,6 +87,7 @@
           <el-button link type="primary" @click="handleDeployLog(scope.row.id)"> 日志 </el-button>
           <el-button
             link
+            v-if="!batchTaskId"
             type="danger"
             @click="handleDelete(scope.row.id)"
             v-hasPermi="['resource:project:delete']"

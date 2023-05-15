@@ -25,8 +25,16 @@
         :default-time="new Date()"
       />
     </el-form-item>
-    <el-form-item label="批量部署包" prop="">
-      <UploadInfraFile v-model="formData.zipFileId" />
+    <el-form-item
+      label="批量部署包"
+      prop="zipFileId"
+      :rules="[{ required: true, message: '批量部署包不能为空', trigger: 'blur' }]"
+    >
+      <UploadInfraFile
+        v-model="formData.zipFileId"
+        :fileTypes="['zip']"
+        @upload-finished="handleZipUploadFinished"
+      />
     </el-form-item>
     <el-form-item label="部署服务" prop="deployTasks">
       <el-button type="primary" @click="handleAddDeployTask"
@@ -43,14 +51,13 @@
             <AgentSelect v-if="scope.row.projectId" v-model="scope.row.agentIds" />
           </template>
         </el-table-column>
-        <el-table-column label="部署版本" align="center" prop="projectVersionId">
+        <el-table-column label="部署版本" align="center" prop="agentIds">
           <template #default="scope">
-            <ProjectVersionSelect
-              v-if="scope.row.projectId"
-              v-model="scope.row.projectVersionId"
-              :project-id="scope.row.projectId"
-            />
+            <el-input v-model="scope.row.projectVersion" placeholder="请输入部署版本" />
           </template>
+        </el-table-column>
+        <el-table-column label="部署包名" align="center" prop="deployProjectName">
+          <template #default="scope"> {{ scope.row.deployJarFilename }}</template>
         </el-table-column>
         <el-table-column label="操作" align="center" fixed="right" width="80">
           <template #default="scope">
@@ -67,21 +74,24 @@
       </el-table>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm">确 定</el-button>
-      <el-button>返 回</el-button>
+      <el-button type="success" @click="submitForm">确 定</el-button>
+      <el-button type="primary" @click="handleBack">返 回</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script lang="ts" name="BatchDeployTaskForm" setup>
 import { cloneDeep } from '@/utils'
 import { api } from '@/api/deploy/batch-task'
+import { InfraFileVO } from '@/api/infra/file'
+import { useTagsViewStore } from '@/store/modules/tagsView'
 import ProjectSelect from '@/views/resource/project/ProjectSelect.vue'
 import AgentSelect from '@/views/resource/agent/AgentSelect.vue'
 import UploadInfraFile from '@/views/infra/file/UploadInfraFile.vue'
-import ProjectVersionSelect from '@/views/resource/project/ProjectVersionSelect.vue'
 
 const { t } = useI18n() // 国际化
+const router = useRouter()
 const message = useMessage() // 消息弹窗
+const tagsViewStore = useTagsViewStore()
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
@@ -143,8 +153,12 @@ const submitForm = async () => {
       message.warning(`请检查部署配置，【第${indexOne}项部署机器】不能为空`)
       return
     }
-    if (!deployTask.projectVersionId) {
+    if (!deployTask.projectVersion) {
       message.warning(`请检查部署配置，【第${indexOne}项部署版本】不能为空`)
+      return
+    }
+    if (!deployTask.deployJarFilename) {
+      message.warning(`请检查部署配置，【第${indexOne}项部署包】不能为空`)
       return
     }
   }
@@ -153,18 +167,20 @@ const submitForm = async () => {
   formLoading.value = true
   try {
     const data = formData.value
-    if (formType.value === 'create') {
-      await api.create(data)
-      message.success(t('common.createSuccess'))
-    } else {
-      await api.update(data)
-      message.success(t('common.updateSuccess'))
-    }
+    await api.create(data)
+    message.success(t('common.createSuccess'))
     dialogVisible.value = false
+    handleBack()
     emit('success')
   } finally {
     formLoading.value = false
   }
+}
+
+/** 返回 */
+const handleBack = () => {
+  router.go(-1)
+  tagsViewStore.delView(unref(router.currentRoute))
 }
 
 /** 重置表单 */
@@ -176,6 +192,13 @@ const resetForm = () => {
 /** 新增部署服务 */
 const handleAddDeployTask = () => {
   formData.value.deployTasks.push({})
+}
+
+/** 文件上传成功 */
+const handleZipUploadFinished = async (file: InfraFileVO) => {
+  const deployTasks = await api.parseZip(file.id, file.name)
+  formData.value.deployTasks = deployTasks
+  message.success(`识别匹配成功【${deployTasks.length}】部署包`)
 }
 
 /** 移除部署服务 */

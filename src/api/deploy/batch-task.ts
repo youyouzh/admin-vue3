@@ -14,7 +14,8 @@ const basePath = '/deploy/batch-tasks'
 
 export const api = {
   getAll: async () => {
-    const data = await request.get({ url: basePath, pageNo: 1, pageSize: 500 })
+    const params = { pageNo: 1, pageSize: 500 }
+    const data = await request.get({ url: basePath, params })
     return data.list
   },
   getPage: async (params: PageParam) => {
@@ -22,6 +23,10 @@ export const api = {
   },
   getDetail: async (id: number) => {
     return await request.get({ url: `${basePath}/${id}` })
+  },
+  parseZip: async (fileId: number, fileName: string) => {
+    const params = { zipFileId: fileId, zipFileName: fileName }
+    return await request.get({ url: `${basePath}/parse-zip`, params })
   },
   create: async (data: object) => {
     return await request.post({ url: basePath, data: data })
