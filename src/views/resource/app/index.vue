@@ -23,7 +23,7 @@
           type="primary"
           plain
           @click="openForm('create')"
-          v-hasPermi="['resource:project:create']"
+          v-hasPermi="['resource:app:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
@@ -32,7 +32,7 @@
           plain
           @click="handleExport"
           :loading="exportLoading"
-          v-hasPermi="['resource:project:export']"
+          v-hasPermi="['resource:app:export']"
         >
           <Icon icon="ep:download" class="mr-5px" /> 导出
         </el-button>
@@ -60,7 +60,7 @@
             link
             type="primary"
             @click="openForm('update', scope.row.id)"
-            v-hasPermi="['resource:project:update']"
+            v-hasPermi="['resource:app:update']"
           >
             编辑
           </el-button>
@@ -68,7 +68,7 @@
             link
             type="danger"
             @click="handleDelete(scope.row.id)"
-            v-hasPermi="['resource:project:delete']"
+            v-hasPermi="['resource:app:delete']"
           >
             删除
           </el-button>

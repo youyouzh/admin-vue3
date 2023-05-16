@@ -18,12 +18,12 @@
           type="primary"
           plain
           @click="openForm('create')"
-          v-hasPermi="['resource:project:create']"
+          v-hasPermi="['deploy:batch-task:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
         <router-link to="/deploy/batch-task/create" class="ml-3">
-          <el-button type="success" plain v-hasPermi="['resource:project:create']">
+          <el-button type="success" plain v-hasPermi="['deploy:batch-task:upload']">
             <Icon icon="ep:upload" class="mr-5px" /> 上传
           </el-button>
         </router-link>
@@ -62,7 +62,7 @@
           <el-button
             link
             type="primary"
-            v-hasPermi="['resource:project:update']"
+            v-hasPermi="['deploy:batch-task:deploy']"
             @click="handleRunDeploy(scope.row.id)"
           >
             重新部署
@@ -70,7 +70,7 @@
           <el-button
             link
             type="primary"
-            v-hasPermi="['resource:project:update']"
+            v-hasPermi="['deploy:batch-task:detail']"
             @click="handleDeployDetail(scope.row.id)"
           >
             部署详情
@@ -79,7 +79,7 @@
             link
             type="danger"
             @click="handleDelete(scope.row.id)"
-            v-hasPermi="['resource:project:delete']"
+            v-hasPermi="['deploy:batch-task:delete']"
           >
             删除
           </el-button>

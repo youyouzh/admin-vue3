@@ -76,13 +76,14 @@
         </el-form-item>
       </el-col>
       <Verify
+        v-if="loginData.captchaEnable === 'true'"
         ref="verify"
         :captchaType="captchaType"
         :imgSize="{ width: '400px', height: '200px' }"
         mode="pop"
         @success="handleLogin"
       />
-      <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
+      <el-col :span="24" style="padding-left: 10px; padding-right: 10px" v-if="openSocialLogin">
         <el-form-item>
           <el-row :gutter="5" justify="space-between" style="width: 100%">
             <el-col :span="8">
@@ -109,8 +110,8 @@
           </el-row>
         </el-form-item>
       </el-col>
-      <el-divider content-position="center">{{ t('login.otherLogin') }}</el-divider>
-      <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
+      <el-divider content-position="center" v-if="false">{{ t('login.otherLogin') }}</el-divider>
+      <el-col :span="24" style="padding-left: 10px; padding-right: 10px" v-if="openSocialLogin">
         <el-form-item>
           <div class="flex justify-between w-[100%]">
             <Icon
@@ -173,6 +174,8 @@ const loginData = reactive({
     rememberMe: false
   }
 })
+
+const openSocialLogin = ref(false)
 
 const socialList = [
   { icon: 'ant-design:github-filled', type: 0 },

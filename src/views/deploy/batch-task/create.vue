@@ -30,6 +30,12 @@
       prop="zipFileId"
       :rules="[{ required: true, message: '批量部署包不能为空', trigger: 'blur' }]"
     >
+      <template #label>
+        <Tooltip
+          message="包含各个服务jar包的zip压缩包，jar包文件名按照{编码code}-{版本号version}方式命名"
+          titel="批量部署包"
+        />
+      </template>
       <UploadInfraFile
         v-model="formData.zipFileId"
         :fileTypes="['zip']"
@@ -37,7 +43,7 @@
       />
     </el-form-item>
     <el-form-item label="部署服务" prop="deployTasks">
-      <el-button type="primary" @click="handleAddDeployTask"
+      <el-button type="primary" @click="handleAddDeployTask" disabled
         ><Icon icon="ep:plus" />添加部署服务</el-button
       >
       <el-table :data="formData.deployTasks">

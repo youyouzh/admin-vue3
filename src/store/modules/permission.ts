@@ -35,7 +35,7 @@ export const usePermissionStore = defineStore('permission', {
     async generateRoutes(): Promise<unknown> {
       return new Promise<void>(async (resolve) => {
         let res: AppCustomRouteRecordRaw[]
-        if (wsCache.get(CACHE_KEY.ROLE_ROUTERS) && false) {
+        if (wsCache.get(CACHE_KEY.ROLE_ROUTERS)) {
           res = wsCache.get(CACHE_KEY.ROLE_ROUTERS) as AppCustomRouteRecordRaw[]
         } else {
           res = await getAsyncRoutes()

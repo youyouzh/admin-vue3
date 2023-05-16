@@ -22,7 +22,7 @@
           v-if="!batchTaskId"
           plain
           @click="openForm('create')"
-          v-hasPermi="['resource:project:create']"
+          v-hasPermi="['deploy:task:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
@@ -79,18 +79,25 @@
           <el-button
             link
             type="primary"
-            v-hasPermi="['resource:project:update']"
+            v-hasPermi="['deploy:task:update']"
             @click="handleRunDeploy(scope.row.id)"
           >
             重新部署
           </el-button>
-          <el-button link type="primary" @click="handleDeployLog(scope.row.id)"> 日志 </el-button>
+          <el-button
+            link
+            type="primary"
+            v-hasPermi="['deploy:task:query']"
+            @click="handleDeployLog(scope.row.id)"
+          >
+            日志
+          </el-button>
           <el-button
             link
             v-if="!batchTaskId"
             type="danger"
             @click="handleDelete(scope.row.id)"
-            v-hasPermi="['resource:project:delete']"
+            v-hasPermi="['deploy:task:delete']"
           >
             删除
           </el-button>

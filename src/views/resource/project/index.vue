@@ -61,7 +61,10 @@
       />
       <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="scope">
-          <router-link :to="`/resource/project-detail/${scope.row.id}`">
+          <router-link
+            :to="`/resource/project-detail/${scope.row.id}`"
+            v-hasPermi="['resource:project:update']"
+          >
             <el-button link type="primary">编辑详情</el-button>
           </router-link>
           <el-button
