@@ -1,3 +1,4 @@
+import { crudApi } from '@/api/crud'
 import request from '@/config/axios'
 
 export interface PostVO {
@@ -5,10 +6,13 @@ export interface PostVO {
   name: string
   code: string
   sort: number
-  status: number
+  state: string
   remark: string
   createdAt?: Date
 }
+
+const basePath = '/system/post'
+export const api = crudApi(basePath)
 
 // 查询岗位列表
 export const getPostPage = async (params: PageParam) => {

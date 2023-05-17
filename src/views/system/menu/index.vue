@@ -28,7 +28,7 @@
           class="!w-240px"
         >
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
+            v-for="dict in getDictOptions(DICT_TYPE.COMMON_STATE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -72,9 +72,9 @@
       <el-table-column prop="permission" label="权限标识" :show-overflow-tooltip="true" />
       <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true" />
       <el-table-column prop="componentName" label="组件名称" :show-overflow-tooltip="true" />
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="state" label="状态" width="80">
         <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
+          <dict-tag :type="DICT_TYPE.COMMON_STATE" :value="scope.row.state" />
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -112,7 +112,7 @@
   <MenuForm ref="formRef" @success="getList" />
 </template>
 <script setup lang="ts" name="SystemMenu">
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import { handleTree } from '@/utils/tree'
 import * as MenuApi from '@/api/system/menu'
 import MenuForm from './MenuForm.vue'

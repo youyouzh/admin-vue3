@@ -10,8 +10,8 @@ export const CommonStatusEnum = {
 
 // 通用状态
 export const CommonState = {
-  ENABLED: 'ENABLED',
-  DISABLED: 'DISABLED'
+  ENABLED: 'ENABLED', // 开启
+  DISABLED: 'DISABLED' // 禁用
 }
 
 // 项目状态
@@ -21,26 +21,20 @@ export const DeployProjectState = {
   DISCARD: 'DISCARD'
 }
 
-/**
- * 菜单的类型枚举
- */
-export const SystemMenuTypeEnum = {
-  DIR: 1, // 目录
-  MENU: 2, // 菜单
-  BUTTON: 3 // 按钮
+/** 菜单的类型枚举 */
+export const SystemMenuType = {
+  DIR: 'DIR', // 目录
+  MENU: 'MENU', // 菜单
+  BUTTON: 'BUTTON' // 按钮
 }
 
-/**
- * 角色的类型枚举
- */
-export const SystemRoleTypeEnum = {
-  SYSTEM: 1, // 内置角色
-  CUSTOM: 2 // 自定义角色
+/** 角色的类型枚举 */
+export const SystemRoleType = {
+  SYSTEM: 'SYSTEM', // 内置角色
+  CUSTOM: 'CUSTOM' // 自定义角色
 }
 
-/**
- * 数据权限的范围枚举
- */
+/** 数据权限的范围枚举 */
 export const SystemDataScopeEnum = {
   ALL: 1, // 全部数据权限
   DEPT_CUSTOM: 2, // 指定部门数据权限

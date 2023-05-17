@@ -24,7 +24,7 @@
           class="!w-240px"
         >
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
+            v-for="dict in getDictOptions(DICT_TYPE.COMMON_STATE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -65,9 +65,9 @@
         </template>
       </el-table-column>
       <el-table-column prop="sort" label="排序" width="200" />
-      <el-table-column prop="status" label="状态" width="100">
+      <el-table-column prop="state" label="状态" width="100">
         <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
+          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.state" />
         </template>
       </el-table-column>
       <el-table-column
@@ -104,7 +104,7 @@
   <DeptForm ref="formRef" @success="getList" />
 </template>
 <script setup lang="ts" name="SystemDept">
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
 import { handleTree } from '@/utils/tree'
 import * as DeptApi from '@/api/system/dept'
@@ -118,7 +118,7 @@ const list = ref() // 列表的数据
 const queryParams = reactive({
   title: '',
   name: undefined,
-  status: undefined,
+  state: undefined,
   pageNo: 1,
   pageSize: 100
 })

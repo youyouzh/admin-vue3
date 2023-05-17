@@ -25,9 +25,9 @@
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+        <el-select v-model="queryParams.state" placeholder="请选择状态" clearable>
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
+            v-for="dict in getDictOptions(DICT_TYPE.COMMON_STATE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -66,9 +66,9 @@
       <el-table-column label="岗位编码" align="center" prop="code" />
       <el-table-column label="岗位顺序" align="center" prop="sort" />
       <el-table-column label="岗位备注" align="center" prop="remark" />
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="state">
         <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
+          <dict-tag :type="DICT_TYPE.COMMON_STATE" :value="scope.row.state" />
         </template>
       </el-table-column>
       <el-table-column
@@ -112,7 +112,7 @@
   <PostForm ref="formRef" @success="getList" />
 </template>
 <script setup lang="tsx" name="SystemPost">
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
 import { download } from '@/utils/download'
 import * as PostApi from '@/api/system/post'
@@ -128,7 +128,7 @@ const queryParams = reactive({
   pageSize: 10,
   code: '',
   name: '',
-  status: undefined
+  state: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 const exportLoading = ref(false) // 导出的加载中

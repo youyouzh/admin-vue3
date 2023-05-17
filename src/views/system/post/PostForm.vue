@@ -17,9 +17,9 @@
         <el-input v-model="formData.sort" placeholder="请输入岗位顺序" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="formData.status" clearable placeholder="请选择状态">
+        <el-select v-model="formData.state" clearable placeholder="请选择状态">
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
+            v-for="dict in getDictOptions(DICT_TYPE.COMMON_STATE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -37,9 +37,10 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemPostForm" setup>
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { CommonStatusEnum } from '@/utils/constants'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
+import { CommonState } from '@/utils/constants'
 import * as PostApi from '@/api/system/post'
+import { cloneDeep } from '@/utils'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -48,18 +49,19 @@ const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
-const formData = ref({
+const defaultFormData = {
   id: undefined,
   name: '',
   code: '',
   sort: 0,
-  status: CommonStatusEnum.ENABLE,
+  state: CommonState.ENABLED,
   remark: ''
-})
+}
+const formData = ref(cloneDeep(defaultFormData))
 const formRules = reactive({
   name: [{ required: true, message: '岗位标题不能为空', trigger: 'blur' }],
   code: [{ required: true, message: '岗位编码不能为空', trigger: 'change' }],
-  status: [{ required: true, message: '岗位状态不能为空', trigger: 'change' }],
+  state: [{ required: true, message: '岗位状态不能为空', trigger: 'change' }],
   remark: [{ required: false, message: '岗位内容不能为空', trigger: 'blur' }]
 })
 const formRef = ref() // 表单 Ref
@@ -110,14 +112,7 @@ const submitForm = async () => {
 
 /** 重置表单 */
 const resetForm = () => {
-  formData.value = {
-    id: undefined,
-    name: '',
-    code: '',
-    sort: undefined,
-    status: CommonStatusEnum.ENABLE,
-    remark: ''
-  }
+  formData.value = cloneDeep(defaultFormData)
   formRef.value?.resetFields()
 }
 </script>

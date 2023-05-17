@@ -11,7 +11,7 @@ export interface UserVO {
   sex: number
   avatar: string
   loginIp: string
-  status: number
+  state: string
   remark: string
   loginDate: Date
   createdAt: Date
@@ -54,19 +54,13 @@ export const importUserTemplate = () => {
 
 // 用户密码重置
 export const resetUserPwd = (id: number, password: string) => {
-  const data = {
-    id,
-    password
-  }
+  const data = { id, password }
   return request.put({ url: '/system/user/update-password', data: data })
 }
 
 // 用户状态修改
-export const updateUserStatus = (id: number, status: number) => {
-  const data = {
-    id,
-    status
-  }
+export const updateUserStatus = (id: number, state: string) => {
+  const data = { id, state }
   return request.put({ url: '/system/user/update-status', data: data })
 }
 

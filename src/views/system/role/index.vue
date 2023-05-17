@@ -91,9 +91,9 @@
       <el-table-column align="center" label="角色标识" prop="code" />
       <el-table-column align="center" label="显示顺序" prop="sort" />
       <el-table-column align="center" label="备注" prop="remark" />
-      <el-table-column align="center" label="状态" prop="status">
+      <el-table-column align="center" label="状态" prop="state">
         <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
+          <dict-tag :type="DICT_TYPE.COMMON_STATE" :value="scope.row.state" />
         </template>
       </el-table-column>
       <el-table-column
@@ -180,7 +180,7 @@ const queryParams = reactive({
   pageSize: 10,
   code: '',
   name: '',
-  status: undefined,
+  state: undefined,
   createdAt: []
 })
 const queryFormRef = ref() // 搜索的表单

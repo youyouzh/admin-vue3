@@ -1,9 +1,9 @@
 // 定义给予restFULL的crudapi模板
 import request from '@/config/axios'
 
-export const crud = (basePath: string) => {
+export const crudApi = (basePath: string) => {
   return {
-    getAll: async () => {
+    getSimpleAll: async () => {
       const data = await request.get({ url: basePath, pageNo: 1, pageSize: 500 })
       return data.list
     },

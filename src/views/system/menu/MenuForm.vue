@@ -23,7 +23,7 @@
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="formData.type">
           <el-radio-button
-            v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_MENU_TYPE)"
+            v-for="dict in getDictOptions(DICT_TYPE.SYSTEM_MENU_TYPE)"
             :key="dict.label"
             :label="dict.value"
           >
@@ -61,10 +61,10 @@
       <el-form-item label="显示排序" prop="sort">
         <el-input-number v-model="formData.sort" :min="0" clearable controls-position="right" />
       </el-form-item>
-      <el-form-item label="菜单状态" prop="status">
-        <el-radio-group v-model="formData.status">
+      <el-form-item label="菜单状态" prop="state">
+        <el-radio-group v-model="formData.state">
           <el-radio
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
+            v-for="dict in getDictOptions(DICT_TYPE.COMMON_STATE)"
             :key="dict.label"
             :label="dict.value"
           >
@@ -72,7 +72,7 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="formData.type !== 3" label="显示状态" prop="visible">
+      <el-form-item v-if="formData.type !== 'BUTTON'" label="显示状态" prop="visible">
         <template #label>
           <Tooltip message="选择隐藏时，路由将不会出现在侧边栏，但仍然可以访问" titel="显示状态" />
         </template>
@@ -81,7 +81,7 @@
           <el-radio key="false" :label="false" border>隐藏</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="formData.type !== 3" label="总是显示" prop="alwaysShow">
+      <el-form-item v-if="formData.type !== 'BUTTON'" label="总是显示" prop="alwaysShow">
         <template #label>
           <Tooltip
             message="选择不是时，当该菜单只有一个子菜单时，不展示自己，直接展示子菜单"
@@ -93,7 +93,7 @@
           <el-radio key="false" :label="false" border>不是</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="formData.type === 2" label="缓存状态" prop="keepAlive">
+      <el-form-item v-if="formData.type === 'MENU'" label="缓存状态" prop="keepAlive">
         <template #label>
           <Tooltip
             message="选择缓存时，则会被 `keep-alive` 缓存，必须填写「组件名称」字段"
@@ -113,11 +113,12 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemMenuForm" setup>
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import * as MenuApi from '@/api/system/menu'
 import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
-import { CommonStatusEnum, SystemMenuTypeEnum } from '@/utils/constants'
+import { CommonState, SystemMenuType } from '@/utils/constants'
 import { defaultProps, handleTree } from '@/utils/tree'
+import { cloneDeep } from '@/utils'
 
 const { wsCache } = useCache()
 const { t } = useI18n() // 国际化
@@ -127,22 +128,23 @@ const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
-const formData = ref({
+const defaultFormData = {
   id: 0,
   name: '',
   permission: '',
-  type: SystemMenuTypeEnum.DIR,
+  type: SystemMenuType.DIR,
   sort: Number(undefined),
   parentId: 0,
   path: '',
   icon: '',
   component: '',
   componentName: '',
-  status: CommonStatusEnum.ENABLE,
+  state: CommonState.ENABLED,
   visible: true,
   keepAlive: true,
   alwaysShow: true
-})
+}
+const formData = ref(cloneDeep(defaultFormData))
 const formRules = reactive({
   name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
   sort: [{ required: true, message: '菜单顺序不能为空', trigger: 'blur' }],
@@ -184,10 +186,7 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    if (
-      formData.value.type === SystemMenuTypeEnum.DIR ||
-      formData.value.type === SystemMenuTypeEnum.MENU
-    ) {
+    if (formData.value.type === SystemMenuType.DIR || formData.value.type === SystemMenuType.MENU) {
       if (!isExternal(formData.value.path)) {
         if (formData.value.parentId === 0 && formData.value.path.charAt(0) !== '/') {
           message.error('路径必须以 / 开头')
@@ -228,22 +227,7 @@ const getTree = async () => {
 
 /** 重置表单 */
 const resetForm = () => {
-  formData.value = {
-    id: 0,
-    name: '',
-    permission: '',
-    type: SystemMenuTypeEnum.DIR,
-    sort: Number(undefined),
-    parentId: 0,
-    path: '',
-    icon: '',
-    component: '',
-    componentName: '',
-    status: CommonStatusEnum.ENABLE,
-    visible: true,
-    keepAlive: true,
-    alwaysShow: true
-  }
+  formData.value = cloneDeep(defaultFormData)
   formRef.value?.resetFields()
 }
 
