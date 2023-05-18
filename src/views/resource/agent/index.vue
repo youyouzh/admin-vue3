@@ -19,14 +19,6 @@
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
-        <el-button
-          type="primary"
-          plain
-          @click="openForm('create')"
-          v-hasPermi="['resource:agent:create']"
-        >
-          <Icon icon="ep:plus" class="mr-5px" /> 新增
-        </el-button>
         <ButtonAdd permi="resource:agent:create" @click="openForm('create')" />
       </el-form-item>
     </el-form>
@@ -61,14 +53,7 @@
       />
       <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['resource:agent:update']"
-          >
-            编辑
-          </el-button>
+          <ButtonEdit permi="resource:agent:update" @click="openForm('update', scope.row.id)" />
           <ButtonDelete permi="resource:agent:delete" :api="api.delete" :id="scope.row.id" />
         </template>
       </el-table-column>
@@ -89,9 +74,6 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { api } from '@/api/resource/agent'
 import AgentForm from './AgentForm.vue'
-import { ButtonAdd, ButtonDelete } from '@/components/Crud'
-const message = useMessage() // 消息弹窗
-const { t } = useI18n() // 国际化
 
 const loading = ref(true) // 列表的加载中
 const total = ref(0) // 列表的总页数
