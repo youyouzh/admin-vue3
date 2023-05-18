@@ -23,18 +23,20 @@
 import * as PermissionApi from '@/api/system/permission'
 import * as UserApi from '@/api/system/user'
 import * as RoleApi from '@/api/system/role'
+import { cloneDeep } from '@/utils'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formData = ref({
+const defaultFormData = {
   id: undefined,
   nickname: '',
   username: '',
   roleIds: []
-})
+}
+const formData = ref(cloneDeep(defaultFormData))
 const formRef = ref() // 表单 Ref
 const roleList = ref([]) // 角色的列表
 
@@ -83,12 +85,7 @@ const submitForm = async () => {
 
 /** 重置表单 */
 const resetForm = () => {
-  formData.value = {
-    id: undefined,
-    nickname: '',
-    username: '',
-    roleIds: []
-  }
+  formData.value = cloneDeep(defaultFormData)
   formRef.value?.resetFields()
 }
 </script>

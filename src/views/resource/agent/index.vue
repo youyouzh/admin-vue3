@@ -27,15 +27,7 @@
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
-        <el-button
-          type="success"
-          plain
-          @click="handleExport"
-          :loading="exportLoading"
-          v-hasPermi="['resource:agent:export']"
-        >
-          <Icon icon="ep:download" class="mr-5px" /> 导出
-        </el-button>
+        <ButtonAdd permi="resource:agent:create" @click="openForm('create')" />
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -77,14 +69,7 @@
           >
             编辑
           </el-button>
-          <el-button
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            v-hasPermi="['resource:agent:delete']"
-          >
-            删除
-          </el-button>
+          <ButtonDelete permi="resource:agent:delete" :api="api.delete" :id="scope.row.id" />
         </template>
       </el-table-column>
     </el-table>
@@ -104,6 +89,7 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { api } from '@/api/resource/agent'
 import AgentForm from './AgentForm.vue'
+import { ButtonAdd, ButtonDelete } from '@/components/Crud'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
@@ -116,7 +102,6 @@ const queryParams = reactive({
   name: undefined
 })
 const queryFormRef = ref() // 搜索的表单
-const exportLoading = ref(false) // 导出的加载中
 
 const getList = async () => {
   loading.value = true
@@ -139,34 +124,6 @@ const handleQuery = () => {
 const resetQuery = () => {
   queryFormRef.value.resetFields()
   handleQuery()
-}
-
-/** 删除按钮操作 */
-const handleDelete = async (id: number) => {
-  try {
-    // 删除的二次确认
-    await message.delConfirm()
-    // 发起删除
-    await api.delete(id)
-    message.success(t('common.delSuccess'))
-    // 刷新列表
-    await getList()
-  } catch {}
-}
-
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    // const data = await AppApi.export(queryParams)
-    // download.excel(data, '岗位列表.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
 }
 
 /** 初始化 **/

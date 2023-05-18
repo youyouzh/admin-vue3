@@ -60,7 +60,7 @@
           <el-form-item label="用户性别">
             <el-select v-model="formData.sex" placeholder="请选择">
               <el-option
-                v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_USER_SEX)"
+                v-for="dict in getDictOptions(DICT_TYPE.SYSTEM_USER_SEX)"
                 :key="dict.value"
                 :label="dict.label"
                 :value="dict.value"
@@ -96,9 +96,10 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemUserForm" setup>
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { CommonStatusEnum } from '@/utils/constants'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
+import { CommonState } from '@/utils/constants'
 import { defaultProps, handleTree } from '@/utils/tree'
+import { cloneDeep } from '@/utils'
 import * as PostApi from '@/api/system/post'
 import * as DeptApi from '@/api/system/dept'
 import * as UserApi from '@/api/system/user'
@@ -110,7 +111,7 @@ const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
-const formData = ref({
+const defaultFormData = {
   nickname: '',
   deptId: '',
   mobile: '',
@@ -121,9 +122,10 @@ const formData = ref({
   sex: undefined,
   postIds: [],
   remark: '',
-  status: CommonStatusEnum.ENABLE,
+  state: CommonState.ENABLED,
   roleIds: []
-})
+}
+const formData = ref(cloneDeep(defaultFormData))
 const formRules = reactive({
   username: [{ required: true, message: '用户名称不能为空', trigger: 'blur' }],
   nickname: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
@@ -197,20 +199,7 @@ const submitForm = async () => {
 
 /** 重置表单 */
 const resetForm = () => {
-  formData.value = {
-    nickname: '',
-    deptId: '',
-    mobile: '',
-    email: '',
-    id: undefined,
-    username: '',
-    password: '',
-    sex: undefined,
-    postIds: [],
-    remark: '',
-    status: CommonStatusEnum.ENABLE,
-    roleIds: []
-  }
+  formData.value = cloneDeep(defaultFormData)
   formRef.value?.resetFields()
 }
 </script>

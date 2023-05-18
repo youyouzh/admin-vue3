@@ -1,8 +1,4 @@
 <template>
-  <doc-alert title="用户体系" url="https://doc.iocoder.cn/user-center/" />
-  <doc-alert title="三方登陆" url="https://doc.iocoder.cn/social-user/" />
-  <doc-alert title="Excel 导入导出" url="https://doc.iocoder.cn/excel-import-and-export/" />
-
   <el-row :gutter="20">
     <!-- 左侧部门树 -->
     <el-col :span="4" :xs="24">
@@ -46,7 +42,7 @@
               class="!w-240px"
             >
               <el-option
-                v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATE)"
+                v-for="dict in getDictOptions(DICT_TYPE.COMMON_STATE)"
                 :key="dict.value"
                 :label="dict.label"
                 :value="dict.value"
@@ -199,7 +195,7 @@
   <UserAssignRoleForm ref="assignRoleFormRef" @success="getList" />
 </template>
 <script setup lang="ts" name="SystemUser">
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import { checkPermi } from '@/utils/permission'
 import { dateFormatter } from '@/utils/formatTime'
 import { download } from '@/utils/download'

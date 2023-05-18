@@ -30,9 +30,9 @@
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" class="!w-240px" clearable placeholder="请选择状态">
+        <el-select v-model="queryParams.state" class="!w-240px" clearable placeholder="请选择状态">
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
+            v-for="dict in getDictOptions(DICT_TYPE.COMMON_STATE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -161,7 +161,7 @@
   <RoleDataPermissionForm ref="dataPermissionFormRef" @success="getList" />
 </template>
 <script lang="ts" name="SystemRole" setup>
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
 import { download } from '@/utils/download'
 import * as RoleApi from '@/api/system/role'
