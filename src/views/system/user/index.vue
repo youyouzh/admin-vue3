@@ -117,8 +117,8 @@
             <template #default="scope">
               <el-switch
                 v-model="scope.row.state"
-                :active-value="0"
-                :inactive-value="1"
+                active-value="ENABLED"
+                inactive-value="DISABLED"
                 @change="handleStatusChange(scope.row)"
               />
             </template>
