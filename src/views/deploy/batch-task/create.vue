@@ -54,7 +54,11 @@
         </el-table-column>
         <el-table-column label="部署机器" align="center" prop="agentIds">
           <template #default="scope">
-            <AgentSelect v-if="scope.row.projectId" v-model="scope.row.agentIds" />
+            <AgentSelect
+              v-if="scope.row.projectId"
+              v-model="scope.row.agentIds"
+              :project-id="scope.row.projectId"
+            />
           </template>
         </el-table-column>
         <el-table-column label="部署版本" align="center" prop="agentIds">

@@ -24,6 +24,7 @@ import { api, ProjectVO } from '@/api/resource/project'
 const props = defineProps({
   modelValue: propTypes.oneOfType([Number, Array<Number>]),
   multi: propTypes.bool.def(false),
+  filterIds: propTypes.array.def([]),
   disabled: propTypes.bool.def(false)
 })
 
@@ -36,7 +37,8 @@ const options = ref<ProjectVO[]>([])
 const initSelectOptions = async () => {
   try {
     optionLoading.value = true
-    options.value = await api.getAll()
+    const data = await api.getAll()
+    options.value = data.filter((v) => !props.filterIds.includes(v.id))
   } finally {
     optionLoading.value = false
   }

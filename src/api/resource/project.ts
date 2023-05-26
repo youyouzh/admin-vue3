@@ -25,8 +25,8 @@ export const api = {
   create: async (data: ProjectVO) => {
     return await request.post({ url: basePath, data: data })
   },
-  update: async (params: ProjectVO) => {
-    return await request.put({ url: basePath, data: params })
+  update: async (data: ProjectVO, refreshConfig?: boolean) => {
+    return await request.put({ url: `basePath?refreshConfig=${refreshConfig}`, data: data })
   },
   delete: async (id: number) => {
     return await request.delete({ url: `${basePath}/${id}` })

@@ -27,13 +27,16 @@
         />
       </el-form-item>
       <el-form-item label="部署服务" prop="deployTasks">
-        <el-button type="primary" @click="handleAddDeployTask"
-          ><Icon icon="ep:plus" />添加部署服务</el-button
-        >
+        <el-button type="primary" @click="handleAddDeployTask">
+          <Icon icon="ep:plus" />添加部署服务
+        </el-button>
         <el-table :data="formData.deployTasks">
           <el-table-column label="项目" align="center" prop="projectId">
             <template #default="scope">
-              <ProjectSelect v-model="scope.row.projectId" />
+              <ProjectSelect
+                v-model="scope.row.projectId"
+                :filter-ids="formData.deployTasks.map((v) => v.projectId)"
+              />
             </template>
           </el-table-column>
           <el-table-column label="部署机器" align="center" prop="agentIds">

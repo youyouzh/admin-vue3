@@ -25,6 +25,7 @@
     </el-form-item>
     <el-form-item>
       <XButton :title="t('common.save')" type="primary" @click="submitForm()" />
+      <XButton title="保存并刷新" type="info" @click="submitForm(true)" />
     </el-form-item>
   </el-form>
 </template>
@@ -49,7 +50,7 @@ const formRules = reactive({
 })
 
 /** 提交表单 */
-const submitForm = async () => {
+const submitForm = async (refreshConfig?: boolean) => {
   // 校验表单
   if (!formRef) return
   const valid = await formRef.value.validate()
@@ -58,7 +59,7 @@ const submitForm = async () => {
   formLoading.value = true
   try {
     const data = formData.value as unknown as ProjectVO
-    await api.update(data)
+    await api.update(data, refreshConfig)
     message.success(t('common.updateSuccess'))
   } finally {
     formLoading.value = false

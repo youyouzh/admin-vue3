@@ -11,7 +11,7 @@
         <ProjectSelect v-model="formData.projectId" />
       </el-form-item>
       <el-form-item label="部署机器" prop="agentIds">
-        <AgentSelect v-model="formData.agentIds" />
+        <AgentSelect v-model="formData.agentIds" :project-id="formData.projectId" />
       </el-form-item>
       <el-form-item label="部署版本" prop="projectVersionId" v-if="formData.projectId">
         <ProjectVersionSelect

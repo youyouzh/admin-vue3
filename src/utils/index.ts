@@ -166,3 +166,29 @@ export const cloneDeep = (object) => {
   }
   return object
 }
+
+/**
+ * 缓存数据
+ */
+export const requestCacher = (key: string, callback: Function) => {
+  const cacheKey = 'request-cacher-' + key
+  return {
+    getKey: () => cacheKey,
+    clear: () => localStorage.removeItem(cacheKey),
+    get: () => {
+      let cacheData = localStorage.getItem(cacheKey)
+      if (cacheData && cacheData['value'] && cacheData['expires'] > new Date()) {
+        // 未过期数据直接放回
+        return JSON.parse(cacheData['value'])
+      } else {
+        const requestData = callback()
+        // 缓存数据，并标记过期时间为10分钟后
+        cacheData = JSON.stringify({
+          value: JSON.stringify(requestData),
+          expires: Date.now() + 600 * 1000
+        })
+        localStorage.setItem(cacheKey, cacheData)
+      }
+    }
+  }
+}
